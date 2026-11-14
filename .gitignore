@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-preview
+.venv
+__pycache__
+pipeline/.horizons_cache
+pipeline/dem/*.tif
+
+*.bak
+pipeline/dem/*
+!pipeline/dem/.gitkeep
+.DS_Store

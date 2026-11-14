@@ -1,0 +1,12 @@
+{
+  "_comment": "Coordinates are mean-Earth/polar-axis frame, east longitude 0-360. Values come from the research report's table (NASA Lunar Surface Data Book 2025 region centres; LROC fixes for landers). Region centres are reference points, not landing ellipses. VERIFY each against its source before quoting it in the submission.",
+  "sites": [
+    {"id": "connecting-ridge",     "name": "Connecting Ridge",        "kind": "Artemis candidate region", "lat": -89.4632, "lon": 222.51,   "note": "Ridge between Shackleton and de Gerlache; long-studied for near-continuous sunlight."},
+    {"id": "shackleton-rim",       "name": "Shackleton rim",          "kind": "Artemis candidate region", "lat": -89.7668, "lon": 188.13,   "note": "Rim of Shackleton crater, next to permanently shadowed terrain."},
+    {"id": "peak-near-shackleton", "name": "Peak near Shackleton",    "kind": "Artemis candidate region", "lat": -88.8110, "lon": 123.6901, "note": "Elevated terrain near Shackleton."},
+    {"id": "de-gerlache-rim",      "name": "de Gerlache rim",         "kind": "Artemis candidate region", "lat": -88.6834, "lon": 292.07,   "note": "Rim of de Gerlache crater."},
+    {"id": "nobile-rim-1",         "name": "Nobile Rim 1",            "kind": "Artemis III candidate",    "lat": -85.4381, "lon": 37.3667,  "note": "Rim of Nobile crater."},
+    {"id": "im2-athena",           "name": "IM-2 Athena (Mons Mouton)", "kind": "CLPS / commercial lander", "lat": -84.7906, "lon": 29.1957,  "note": "Intuitive Machines IM-2 landing (2025), LROC-derived position."},
+    {"id": "im1-odysseus",         "name": "IM-1 Odysseus (Malapert A)", "kind": "CLPS / commercial lander", "lat": -80.13,   "lon": 1.44,     "note": "Intuitive Machines IM-1 landing (2024), LROC-derived position."}
+  ]
+}
