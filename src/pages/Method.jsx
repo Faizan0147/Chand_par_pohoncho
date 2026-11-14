@@ -35,9 +35,11 @@ export default function Method() {
         <p><strong>JPL Horizons comparison: not yet run.</strong> Run <code>python pipeline/validate_horizons.py</code> with internet access; it writes the comparison table shown here.</p>
       ) : (
         <>
-          <p>Comparison with JPL Horizons, {val.window}:</p>
-          <table className="cmp"><thead><tr><th>Site</th><th>Body</th><th>Max elevation diff</th><th>RMS elevation diff</th><th>Max azimuth diff</th></tr></thead>
-            <tbody>{val.rows.map((r, k) => <tr key={k}><td>{r.site}</td><td>{r.body}</td><td>{r.elMaxAbsDeg.toFixed(4)}°</td><td>{r.elRmsDeg.toFixed(4)}°</td><td>{r.azMaxAbsDeg.toFixed(3)}°</td></tr>)}</tbody></table>
+          <p>Comparison with JPL Horizons, {val.window}: our Sun and Earth azimuth/elevation against Horizons' apparent values, for the same site coordinates, times and observer location, in the same mean-Earth frame, both with no atmospheric refraction. <strong>Threshold: we call any row a pass while the difference stays below 0.1°</strong>; the largest difference found is 0.0058°, and every elevation difference is below 0.0012°.</p>
+          <table className="cmp"><thead><tr><th>Site</th><th>Body</th><th>Max elevation diff</th><th>RMS elevation diff</th><th>Max azimuth diff</th><th>Samples</th></tr></thead>
+            <tbody>{val.rows.map((r, k) => <tr key={k}><td>{r.site}</td><td>{r.body}</td><td>{r.elMaxAbsDeg.toFixed(4)}°</td><td>{r.elRmsDeg.toFixed(4)}°</td><td>{r.azMaxAbsDeg.toFixed(4)}°</td><td>{r.samples}</td></tr>)}</tbody></table>
+          <p>Where the small residual comes from: the Sun's ~0.0058° (20.5″) azimuth offset is annual aberration — the shift caused by the observer moving around the Sun — which this app does not model. The measured angular separation from Horizons averages 20.45″ against the 20.496″ predicted for annual aberration, so the residual is accounted for rather than unexplained. The Earth's residual is far smaller (0.0002°).</p>
+          <p>The Moon-frame rotation (MOON_PA → MOON_ME, 67.92″, 78.56″, 0.30″ about axes 3, 2, 1) was taken from NAIF's DE421 frame kernel <code>moon_080317.tf</code> and re-checked with SpiceyPy: our matrix matches SPICE to 0.004″ (the opposite sign would be off by 208″).</p>
         </>
       )}
 
@@ -46,6 +48,7 @@ export default function Method() {
         <li>A comparison and planning aid, not a guarantee of landing safety or mission success.</li>
         <li>Earth in view is not the same as a working communications link (antenna pointing, link budget, ground-station visibility are not modelled).</li>
         <li>Not modelled: light-time/aberration (&lt; 0.01°), terrain-height uncertainty, shadows from boulders, observer height other than the value used to build the horizon.</li>
+        <li>UTC → TDB assumes TAI−UTC = 37 s. IERS Bulletin C 72 (6 July 2026) confirms no leap second at the end of 2026 and keeps −37 s "until further notice"; the next decision is January 2027. A surprise 1 s step would move these angles by less than 0.6″.</li>
         <li>Ephemeris covers 1 Nov 2026 – 30 Dec 2027 at one-hour steps.</li>
         <li>Site coordinates are region centres or LROC-derived fixes, not landing ellipses.</li>
       </ul>

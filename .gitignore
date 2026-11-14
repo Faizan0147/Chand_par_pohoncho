@@ -5,6 +5,7 @@ dist-preview
 __pycache__
 pipeline/.horizons_cache
 pipeline/dem/*.tif
+pipeline/kernels/*.bpc
 
 *.bak
 pipeline/dem/*
