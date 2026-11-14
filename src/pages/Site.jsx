@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Panorama from '../components/Panorama.jsx'
 import Timeline from '../components/Timeline.jsx'
 import SlipStrip from '../components/SlipStrip.jsx'
+import MoonVsHome from '../components/MoonVsHome.jsx'
 import { useData, useKeepSearch, useScenario } from '../lib/data.jsx'
 import { SUN_RADIUS_DEG, EARTH_RADIUS_DEG } from '../lib/geometry.js'
 import { dateFromIdx, fmtDate, fmtHours, missionWindow, nextChange, slipProfile, windowStats } from '../lib/metrics.js'
@@ -101,6 +102,9 @@ function SiteView({ site }) {
         <li>{earthSentence(st, sc)}</li>
         <li>{bothSentence(st)}</li>
       </ul>
+
+      <h2>Moon vs. home</h2>
+      <MoonVsHome site={site} series={series} eph={eph} i0={i0} />
 
       <h2>If the launch slips</h2>
       <div className="panel">

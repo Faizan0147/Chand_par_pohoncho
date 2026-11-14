@@ -71,7 +71,7 @@ Windows note: if App Control blocks PyPI DLLs: `Get-ChildItem -Recurse .venv\Lib
 Rules: branch per module, small PRs, main always builds; only M1 owners regenerate/commit `public/data/*.json`; each feature adds its own files/CSS (avoid editing `styles.css` shared sections); freeze features once slip + compare work on real terrain.
 
 ## 8. Current status (14 Nov 2026)
-Built: ephemeris pipeline, DEM ray-marcher (tested on a synthetic mountain), 4-page app, URL state, slip strip, deploy workflow, single-file preview.
+Built: ephemeris pipeline, DEM ray-marcher (tested on a synthetic mountain), 4-page app, URL state, slip strip, single-file preview. CI/CD pipelines are removed for now (run `npm test` and `npm run build` locally before every PR).
 Open: terrain still synthetic in committed data (teammate reports 5/7 real on their machine, see `M1-STATUS.md`); Shackleton rim coordinate likely wrong (lon 188.13 vs published ~204.27 E, 89.78S); tiles only reach ~8 km but march is 15 km; frame/longitude convention unconfirmed; Horizons validation never run; not built: Moon-vs-home, PDF brief, PSR layer, landing oval, 3D view.
 
 ## 9. Honesty rules

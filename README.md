@@ -50,7 +50,7 @@ Needs internet. Writes `public/data/validation.json`, which the *How it works* p
 
 ## Deploy
 
-Push to `main` on GitHub, then Settings → Pages → Source: GitHub Actions. `.github/workflows/deploy.yml` tests, builds and publishes `dist/`. The app uses relative paths and a hash router, so it works under any repo name.
+CI/CD pipelines are removed for now. Run `npm test` and `npm run build`, then publish `dist/` (or the single-file `dist-preview/rimlight-preview.html`) by hand. The app uses relative paths and a hash router, so it works under any repo name.
 
 ## Layout
 
