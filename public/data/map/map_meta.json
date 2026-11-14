@@ -1,0 +1,209 @@
+{
+ "version": 1,
+ "generated_utc": "2026-11-14T17:22:09Z",
+ "placeholder": false,
+ "projection": {
+  "name": "South polar stereographic, 1737.4 km sphere, true scale at the pole",
+  "crs": "PROJCS[\"Moon (2015) - Sphere / Ocentric / South Polar\",GEOGCS[\"Moon (2015) - Sphere / Ocentric\",DATUM[\"Moon (2015) - Sphere\",SPHEROID[\"Moon (2015) - Sphere\",1737400,0,AUTHORITY[\"IAU\",\"30100\"]],AUTHORITY[\"IAU\",\"30100\"]],PRIMEM[\"Reference Meridian\",0,AUTHORITY[\"IAU\",\"30100\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"IAU\",\"30100\"]],PROJECTION[\"Polar_Stereographic\"],PARAMETER[\"latitude_of_origin\",-90],PARAMETER[\"central_meridian\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",NORTH],AXIS[\"Northing\",NORTH],AUTHORITY[\"IAU\",\"30135\"]]",
+  "R": 1737400.0,
+  "k0": 1.0,
+  "lon0": 0.0,
+  "x0": 0.0,
+  "y0": 0.0,
+  "orientation": "pole at the centre; 0 deg E points up, 90 deg E points right"
+ },
+ "source": {
+  "dems": [
+   {
+    "file": "LDEM_80S_80MPP_ADJ.tif",
+    "native_m_per_px": 80.0
+   }
+  ],
+  "citation": "Barker, M. K., et al. (2023), A New View of the Lunar South Pole from the Lunar Orbiter Laser Altimeter (LOLA), Planet. Sci. J. 4, 183, doi:10.3847/PSJ/acf3e1. Data: NASA GSFC PGDA, doi:10.60903/gsfcpgda-lola-spole",
+  "page": "https://pgda.gsfc.nasa.gov/products/90"
+ },
+ "hillshade": {
+  "azimuth_deg": 315.0,
+  "altitude_deg": 40.0,
+  "z_factor": 2.0,
+  "note": "Artificial light from the upper left for readability; not the real Sun."
+ },
+ "views": [
+  {
+   "id": "region",
+   "label": "Whole region",
+   "width": 1024,
+   "height": 1024,
+   "bounds": [
+    -315000.0,
+    -315000.0,
+    315000.0,
+    315000.0
+   ],
+   "m_per_px": 615.234375,
+   "file": "region.webp",
+   "bytes": 183288,
+   "coverage_pct": 93.09,
+   "height_unit_in_dem": "m"
+  },
+  {
+   "id": "pole",
+   "label": "Near the pole",
+   "width": 1024,
+   "height": 1024,
+   "bounds": [
+    -45000.0,
+    -45000.0,
+    45000.0,
+    45000.0
+   ],
+   "m_per_px": 87.890625,
+   "file": "pole.webp",
+   "bytes": 106000,
+   "coverage_pct": 100.0,
+   "height_unit_in_dem": "m"
+  }
+ ],
+ "check_points": [
+  {
+   "id": "pole",
+   "lat": -90.0,
+   "lon": 0.0,
+   "x": 0.0,
+   "y": 0.0
+  },
+  {
+   "id": "connecting-ridge",
+   "lat": -89.4632,
+   "lon": 222.51,
+   "x": -10999.145,
+   "y": -11999.255
+  },
+  {
+   "id": "shackleton-rim",
+   "lat": -89.7668,
+   "lon": 188.13,
+   "x": -1000.037,
+   "y": -7000.346
+  },
+  {
+   "id": "peak-near-shackleton",
+   "lat": -88.811,
+   "lon": 123.6901,
+   "x": 30000.192,
+   "y": -20000.153
+  },
+  {
+   "id": "de-gerlache-rim",
+   "lat": -88.6834,
+   "lon": 292.07,
+   "x": -36999.96,
+   "y": 15001.563
+  },
+  {
+   "id": "nobile-rim-1",
+   "lat": -85.4381,
+   "lon": 37.3667,
+   "x": 84000.068,
+   "y": 109999.967
+  },
+  {
+   "id": "im2-athena",
+   "lat": -84.7906,
+   "lon": 29.1957,
+   "x": 77108.242,
+   "y": 137993.27
+  },
+  {
+   "id": "im1-odysseus",
+   "lat": -80.13,
+   "lon": 1.44,
+   "x": 7539.878,
+   "y": 299939.038
+  },
+  {
+   "id": "grid-89_45",
+   "lat": -89.0,
+   "lon": 45.0,
+   "x": 21442.391,
+   "y": 21442.391
+  },
+  {
+   "id": "grid-89_135",
+   "lat": -89.0,
+   "lon": 135.0,
+   "x": 21442.391,
+   "y": -21442.391
+  },
+  {
+   "id": "grid-89_225",
+   "lat": -89.0,
+   "lon": 225.0,
+   "x": -21442.391,
+   "y": -21442.391
+  },
+  {
+   "id": "grid-89_315",
+   "lat": -89.0,
+   "lon": 315.0,
+   "x": -21442.391,
+   "y": 21442.391
+  },
+  {
+   "id": "grid-86_45",
+   "lat": -86.0,
+   "lon": 45.0,
+   "x": 85802.239,
+   "y": 85802.239
+  },
+  {
+   "id": "grid-86_135",
+   "lat": -86.0,
+   "lon": 135.0,
+   "x": 85802.239,
+   "y": -85802.239
+  },
+  {
+   "id": "grid-86_225",
+   "lat": -86.0,
+   "lon": 225.0,
+   "x": -85802.239,
+   "y": -85802.239
+  },
+  {
+   "id": "grid-86_315",
+   "lat": -86.0,
+   "lon": 315.0,
+   "x": -85802.239,
+   "y": 85802.239
+  },
+  {
+   "id": "grid-82_45",
+   "lat": -82.0,
+   "lon": 45.0,
+   "x": 171813.998,
+   "y": 171813.998
+  },
+  {
+   "id": "grid-82_135",
+   "lat": -82.0,
+   "lon": 135.0,
+   "x": 171813.998,
+   "y": -171813.998
+  },
+  {
+   "id": "grid-82_225",
+   "lat": -82.0,
+   "lon": 225.0,
+   "x": -171813.998,
+   "y": -171813.998
+  },
+  {
+   "id": "grid-82_315",
+   "lat": -82.0,
+   "lon": 315.0,
+   "x": -171813.998,
+   "y": 171813.998
+  }
+ ]
+}

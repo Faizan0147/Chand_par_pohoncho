@@ -1,0 +1,4 @@
+.viewtoggle { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 3px; margin: 0 0 14px; }
+.viewtoggle button { min-height: 40px; min-width: 76px; padding: 6px 16px; border: 0; border-radius: 8px; background: none; color: var(--muted); font: inherit; cursor: pointer; }
+.viewtoggle button[aria-pressed='true'] { background: #1a2a45; color: var(--text); }
+.viewtoggle button:focus-visible { outline: 2px solid var(--earth); outline-offset: 1px; }

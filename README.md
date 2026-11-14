@@ -15,6 +15,7 @@ All state lives in the URL, so any view can be shared as a link.
 | Site coordinates | From our research notes; **verify before citing**. |
 | Horizons comparison | `pipeline/validate_horizons.py` is written but **has not been run**. |
 | Moon-frame offset (PA→ME) | Magnitudes were entered from memory; sign was checked against the mean Earth direction. Verify against the DE421 frame kernel. |
+| Site map (Sites → Map) | Real. Shaded relief from LOLA `LDEM_80S_80MPP_ADJ` and PSR outlines from LOLA `LPSR_80S_20MPP_ADJ_1km2` (built 14 Nov 2026). Rebuild with the steps under *Site map*. |
 
 Not built: Moon-vs-home toggle (SunCalc), jsPDF Site Brief, PSR layer, landing-oval, 3D view.
 
@@ -42,6 +43,23 @@ Run `python pipeline/tests/test_geometry.py` for the offline geometry checks.
 3. Run `python pipeline/build_data.py`. Sites with a DEM switch from "synthetic-demo" to the real horizon, and the demo banners disappear once none remain synthetic.
 4. Options: `--dem-dir`, `--observer-height` (default 2 m).
 
+## Site map (Sites → Map, module M4)
+
+The Sites page can show the sites on a south-polar shaded-relief map. Both data sets below are LOLA-derived NASA products from the PGDA page https://pgda.gsfc.nasa.gov/products/90 (cite Barker et al. 2023, Planet. Sci. J. 4, 183). They are too big for Git: download them by hand into `pipeline/dem/` (git-ignored).
+
+1. **Terrain:** download `LDEM_80S_80MPP_ADJ.TIF` (80 m/px, ~181 MB; `.tif` or `.tiff` both work) from that page into `pipeline/dem/`, then run
+
+       python pipeline/build_map.py
+
+   It writes `public/data/map/region.webp`, `pole.webp` (each kept under 500 KB) and `map_meta.json`; commit those three files. Without downloading, the 20 m cloud-optimized GeoTIFF can be read remotely: `python pipeline/build_map.py --dem https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_20MPP_ADJ.TIF`. With no DEM, `--placeholder` writes only `map_meta.json` and the app shows a labelled grid instead of terrain.
+2. **Permanently shadowed regions (optional):** from the same page, section *Permanently Shadowed Region (PSR) products*, download the four shapefile parts (`.SHP .SHX .DBF .PRJ`) of either the "area > 1 km²" set (`LPSR_80S_20MPP_ADJ_1km2.*`, ~20 MB, recommended) or the full set (`LPSR_80S_20MPP_ADJ.*`, ~154 MB+) into `pipeline/dem/psr/`, then run
+
+       python pipeline/build_psr.py                     # default: pipeline/dem/psr/LPSR_80S_20MPP_ADJ_1km2.shp
+       python pipeline/build_psr.py --shp pipeline/dem/psr/LPSR_80S_20MPP_ADJ.SHP
+
+   It writes `public/data/map/psr.json`. The map's PSR checkbox stays disabled until this file exists and matches the current `map_meta.json` (rerun it after every `build_map.py`).
+3. Tests: `python pipeline/tests/test_build_map.py` (pipeline, offline, synthetic test data only) and `npm test` (includes `scripts/test_map.mjs`).
+
 ## Check against JPL Horizons
 
     python pipeline/validate_horizons.py
@@ -54,7 +72,7 @@ Push to `main` on GitHub, then Settings → Pages → Source: GitHub Actions. `.
 
 ## Layout
 
-    pipeline/   Python: ephemeris, DEM ray-march, data build, tests, Horizons check
-    src/lib/    geometry.js (az/el), metrics.js (windows, slip tolerance), explain.js (plain-language text)
+    pipeline/   Python: ephemeris, DEM ray-march, data build, tests, Horizons check, build_map.py / build_psr.py (site map)
+    src/lib/    geometry.js (az/el), metrics.js (windows, slip tolerance), explain.js (plain-language text), polarMap.js (map projection)
     src/pages/  Pick, Site, Compare, Method
     scripts/    crosscheck.mjs, make_preview.mjs
