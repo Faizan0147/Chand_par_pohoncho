@@ -10,7 +10,7 @@ export default function App() {
   const data = useData()
   const link = useKeepSearch()
   const { pathname } = useLocation()
-  const demo = data.status === 'ready' && data.sites.some(s => s.terrain === 'synthetic-demo')
+  const synthetic = data.status === 'ready' ? data.sites.filter(s => s.terrain === 'synthetic-demo').length : 0
   return (
     <>
       <header className="top">
@@ -21,8 +21,8 @@ export default function App() {
           <NavLink to="/method">How it works</NavLink>
         </nav>
       </header>
-      {demo && pathname !== '/method' && (
-        <div className="banner" role="note"><strong>Demo terrain.</strong> Sun and Earth positions are computed from NASA/JPL ephemeris, but the terrain horizons in this build are synthetic placeholders, so the percentages are illustrative, not predictions.</div>
+      {synthetic > 0 && pathname !== '/method' && (
+        <div className="banner" role="note"><strong>Demo terrain.</strong> {synthetic} of {data.sites.length} sites still use synthetic placeholder horizons, so their percentages are illustrative, not predictions. The other sites use real LRO LOLA elevation data.</div>
       )}
       {pathname !== '/method' && <ScenarioBar />}
       <main>
