@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import ScenarioBar from './components/ScenarioBar.jsx'
-import RimlightLoader from './components/RimlightLoader.jsx'
+import VesperLoader from './components/RimlightLoader.jsx'
 import { useData, useKeepSearch } from './lib/data.jsx'
 import Compare from './pages/Compare.jsx'
 import Home from './pages/Home.jsx'
@@ -9,15 +9,15 @@ import Method from './pages/Method.jsx'
 import Pick from './pages/Pick.jsx'
 import Site from './pages/Site.jsx'
 
-/* ── High-visibility Aerospace Rimlight Logo Mark ── */
-function RimlightLogo() {
+/* ── High-visibility Aerospace Vesper Logo Mark ── */
+function VesperLogo() {
   return (
     <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="brand-logo-svg">
       {/* Outer subtle orbital boundary */}
       <circle cx="18" cy="18" r="16" stroke="var(--line-strong)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6"/>
       {/* Moon body disc */}
       <circle cx="18" cy="18" r="12" fill="var(--panel-elevated)" stroke="var(--line-strong)" strokeWidth="1.2"/>
-      {/* Grazing solar rimlight arc */}
+      {/* Grazing solar Vesper arc */}
       <path
         d="M 18 6 A 12 12 0 0 1 18 30"
         fill="none"
@@ -74,17 +74,17 @@ export default function App() {
   const headerRef = useRef(null)
 
   // Color theme: 'terracotta' or 'regolith'
-  const [theme, setTheme] = useState(() => localStorage.getItem('rimlight-theme') || 'terracotta')
+  const [theme, setTheme] = useState(() => localStorage.getItem('vesper-theme') || 'terracotta')
   // Light / dark mode
-  const [lightMode, setLightMode] = useState(() => localStorage.getItem('rimlight-lightmode') === 'true')
+  const [lightMode, setLightMode] = useState(() => localStorage.getItem('vesper-lightmode') === 'true')
   // Navbar scrolled state
   const [scrolled, setScrolled] = useState(false)
   // Loader shown once per session
-  const [loaderDone, setLoaderDone] = useState(() => sessionStorage.getItem('rimlight-loaded') === 'true')
+  const [loaderDone, setLoaderDone] = useState(() => sessionStorage.getItem('vesper-loaded') === 'true')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('rimlight-theme', theme)
+    localStorage.setItem('vesper-theme', theme)
   }, [theme])
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function App() {
     } else {
       document.documentElement.removeAttribute('data-lightmode')
     }
-    localStorage.setItem('rimlight-lightmode', lightMode)
+    localStorage.setItem('vesper-lightmode', lightMode)
   }, [lightMode])
 
   useEffect(() => {
@@ -107,17 +107,17 @@ export default function App() {
   return (
     <>
       {!loaderDone && (
-        <RimlightLoader onDone={() => {
+        <VesperLoader onDone={() => {
           setLoaderDone(true)
-          sessionStorage.setItem('rimlight-loaded', 'true')
+          sessionStorage.setItem('vesper-loaded', 'true')
         }} />
       )}
       <ScrollToTop />
       <header ref={headerRef} className={`top${scrolled ? ' top--scrolled' : ''}`}>
         <NavLink to={link('/')} className="brand">
-          <RimlightLogo />
+          <VesperLogo />
           <div className="brand-text-col">
-            <span className="brand-word">Rimlight</span>
+            <span className="brand-word">Vesper</span>
             <span className="brand-sub mono">NASA SPACE APPS</span>
           </div>
         </NavLink>
@@ -194,8 +194,10 @@ export default function App() {
       </main>
 
       <footer className="foot muted small">
-        Rimlight is a comparison and planning aid, not a guarantee of landing safety or mission success. Data: NASA/JPL, LRO. Built for NASA Space Apps 2026.
+        Vesper is a comparison and planning aid, not a guarantee of landing safety or mission success. Data: NASA/JPL, LRO. Built for NASA Space Apps 2026.
       </footer>
     </>
   )
 }
+
+

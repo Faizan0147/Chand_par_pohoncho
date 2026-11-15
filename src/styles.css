@@ -1195,7 +1195,7 @@ input[type=range] {
 }
 
 /* Overlay */
-.rimlight-loader {
+.vesper-loader {
   position: fixed;
   inset: 0;
   z-index: 99999;
@@ -1205,7 +1205,7 @@ input[type=range] {
   justify-content: center;
   animation: loader-fade-in 0.4s ease both;
 }
-.rimlight-loader.loader-exit {
+.vesper-loader.loader-exit {
   animation: loader-fade-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
   pointer-events: none;
 }
@@ -2068,3 +2068,4 @@ input[type=range] {
     flex-wrap: wrap;
   }
 }
+
