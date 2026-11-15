@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import ScenarioBar from './components/ScenarioBar.jsx'
+import RimlightLoader from './components/RimlightLoader.jsx'
 import { useData, useKeepSearch } from './lib/data.jsx'
 import Compare from './pages/Compare.jsx'
 import Home from './pages/Home.jsx'
@@ -78,6 +79,8 @@ export default function App() {
   const [lightMode, setLightMode] = useState(() => localStorage.getItem('rimlight-lightmode') === 'true')
   // Navbar scrolled state
   const [scrolled, setScrolled] = useState(false)
+  // Loader shown once per session
+  const [loaderDone, setLoaderDone] = useState(() => sessionStorage.getItem('rimlight-loaded') === 'true')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -103,6 +106,12 @@ export default function App() {
 
   return (
     <>
+      {!loaderDone && (
+        <RimlightLoader onDone={() => {
+          setLoaderDone(true)
+          sessionStorage.setItem('rimlight-loaded', 'true')
+        }} />
+      )}
       <ScrollToTop />
       <header ref={headerRef} className={`top${scrolled ? ' top--scrolled' : ''}`}>
         <NavLink to={link('/')} className="brand">
