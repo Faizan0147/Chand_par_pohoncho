@@ -71,9 +71,9 @@ Windows note: if App Control blocks PyPI DLLs: `Get-ChildItem -Recurse .venv\Lib
 
 Rules: branch per module, small PRs, main always builds; only M1 owners regenerate/commit `public/data/*.json`; each feature adds its own files/CSS (avoid editing `styles.css` shared sections); freeze features once slip + compare work on real terrain.
 
-## 8. Current status (14 Nov 2026)
-Built: ephemeris pipeline, DEM ray-marcher (tested on a synthetic mountain), 4-page app, URL state, slip strip, deploy workflow, single-file preview.
-Open: terrain still synthetic in committed data (teammate reports 5/7 real on their machine, see `M1-STATUS.md`); Shackleton rim coordinate likely wrong (lon 188.13 vs published ~204.27 E, 89.78S); tiles only reach ~8 km but march is 15 km; frame/longitude convention unconfirmed; not built: Moon-vs-home, PDF brief, PSR layer, landing oval, 3D view.
+## 8. Current status (M1 complete, 14 Nov 2026)
+Built: ephemeris pipeline (DE421), DEM ray-marcher, real LOLA terrain for all 7 sites (20 m/px PGDA, 118 m/px global fallback for IM-1), 4-page app, URL state, slip strip, deploy workflow, single-file preview.
+M1 results, coordinate rationale and the 18.6-year validation: `docs/M1-STATUS.md`. Frame/longitude convention confirmed by cross-correlation (zero shift, rms 1.7-2.7 m); not built: Moon-vs-home, PDF brief, PSR layer, landing oval, 3D view.
 Done (M2, 14 Nov 2026): Horizons validation run and committed (`public/data/validation.json`, max diff 0.0058°, threshold 0.1° shown on the Method page); PA→ME offset verified against NAIF `moon_080317.tf` with spiceypy; TAI-UTC = 37 s confirmed (IERS Bulletin C 72).
 
 ## 9. Honesty rules
