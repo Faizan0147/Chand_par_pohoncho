@@ -63,7 +63,8 @@ check('custom smooth-sphere point: PDF says "NO TERRAIN"', /NO TERRAIN/.test((aw
 const b = briefContent(real)
 const allText = [b.title, b.verdict.text, b.slip.text, ...b.sentences, ...b.rows.flat(), b.terrain.label].join(' ')
 check('no character in the brief text is lost by the PDF font (WinAnsi)', !pdfSafe(allText).includes('?') || allText.includes('?'))
-check('file name is safe and names site + date', /^rimlight-brief-[a-z0-9_-]+-\d{4}-\d{2}-\d{2}(-slip\d+)?\.pdf$/.test(briefFileName(sites[0], { ...DEFAULTS, slip: 3 })), briefFileName(sites[0], { ...DEFAULTS, slip: 3 }))
+check('file name is safe and names site + date', /^vesper-brief-[a-z0-9_-]+-\d{4}-\d{2}-\d{2}(-slip\d+)?\.pdf$/.test(briefFileName(sites[0], { ...DEFAULTS, slip: 3 })), briefFileName(sites[0], { ...DEFAULTS, slip: 3 }))
 
 console.log(fail ? `\n${fail} FAILED` : '\nALL PASSED')
 process.exit(fail ? 1 : 0)
+

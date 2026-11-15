@@ -40,14 +40,14 @@ export default function Home() {
         <div className="section-header-tag mono">
           <span>ENGINEERING ARCHITECTURE</span>
         </div>
-        <h2 className="section-title">How Rimlight Solves the Horizon Problem</h2>
+        <h2 className="section-title">How Vesper Solves the Horizon Problem</h2>
 
         <div className="bento-grid">
           <div className="bento-card bento-card-large">
             <div className="bento-badge mono">01 · TERRAIN RAY-MARCHING</div>
             <h3>360° Real-Horizon Occlusion</h3>
             <p>
-              Instead of assuming a flat or smooth sphere, Rimlight marches rays 15 kilometers outwards in 360 azimuthal directions over NASA Lunar Reconnaissance Orbiter (LRO) LOLA 20-meter/pixel laser altimetry models, accounting for lunar curvature and a 2-meter astronaut/lander instrument deck.
+              Instead of assuming a flat or smooth sphere, Vesper marches rays 15 kilometers outwards in 360 azimuthal directions over NASA Lunar Reconnaissance Orbiter (LRO) LOLA 20-meter/pixel laser altimetry models, accounting for lunar curvature and a 2-meter astronaut/lander instrument deck.
             </p>
             <div className="bento-stat-row mono">
               <div>
@@ -78,7 +78,7 @@ export default function Home() {
             <div className="bento-badge mono">03 · LAUNCH SLIP RADAR</div>
             <h3>30-Day Launch Window Margin</h3>
             <p>
-              Rockets rarely launch on the exact planned second. Rimlight computes an instant 31-day slip profile, showing whether a delay will push the stay into an unrecoverable lunar night.
+              Rockets rarely launch on the exact planned second. Vesper computes an instant 31-day slip profile, showing whether a delay will push the stay into an unrecoverable lunar night.
             </p>
             <div className="bento-tag-pill mono">31-Day Slip Radar Profile</div>
           </div>
@@ -185,7 +185,7 @@ export default function Home() {
             </div>
             <h2>Built for NASA Space Apps Challenge 2026</h2>
             <p>
-              Rimlight is an open-source lunar mission comparison and trajectory planning instrument.
+              Vesper is an open-source lunar mission comparison and trajectory planning instrument.
               Conceived, designed, and engineered for the NASA Space Apps Challenge to provide aerospace engineers, mission architects, and the public with clear, human-centered access to lunar terrain illumination physics.
             </p>
           </div>
@@ -218,3 +218,4 @@ export default function Home() {
     </div>
   )
 }
+

@@ -149,7 +149,7 @@ export default function HeroLanding() {
           const r = p.dot > 0.6 ? 1.6 : 1.2
           ctx.fillRect(p.px - r / 2, p.py - r / 2, r, r)
         } else if (p.isLimb && p.dot > -0.2) {
-          // Rimlight grazing edge
+          // Vesper grazing edge
           ctx.fillStyle = `rgba(224, 109, 83, ${0.45 + normZ * 0.4})`
           ctx.fillRect(p.px - 0.7, p.py - 0.7, 1.4, 1.4)
         } else {
@@ -267,7 +267,7 @@ export default function HeroLanding() {
 
         <p className="hero-editorial-sub">
           A few hundred meters on the Moon separates perpetual solar power from freezing darkness. 
-          Rimlight models real-time 360° terrain horizons from NASA LOLA elevation data, predicting solar illumination, 
+          Vesper models real-time 360° terrain horizons from NASA LOLA elevation data, predicting solar illumination, 
           Earth line-of-sight, and launch slip tolerance for Artemis candidate landing sites.
         </p>
 
@@ -420,4 +420,5 @@ export default function HeroLanding() {
     </section>
   )
 }
+
 

@@ -16,10 +16,10 @@ export default function Method() {
       <h1>Methodology &amp; Project Overview</h1>
 
       <div className="panel" style={{ marginTop: '16px', marginBottom: '28px' }}>
-        <h3 style={{ marginTop: 0, marginBottom: '8px' }}>The Rimlight Project</h3>
+        <h3 style={{ marginTop: 0, marginBottom: '8px' }}>The Vesper Project</h3>
         <p style={{ margin: 0, fontSize: '0.96rem', lineHeight: '1.6' }}>
           Built for the <strong>NASA Space Apps Challenge 2026</strong>. 
-          Rimlight was conceived and engineered to answer a critical lunar exploration question: <em>At any specific south-polar coordinate, date, and stay duration, will the Sun and Earth clear the rugged crater terrain, and how late can a launch slip before solar power or direct communication fails?</em>
+          Vesper was conceived and engineered to answer a critical lunar exploration question: <em>At any specific south-polar coordinate, date, and stay duration, will the Sun and Earth clear the rugged crater terrain, and how late can a launch slip before solar power or direct communication fails?</em>
         </p>
       </div>
 
@@ -84,3 +84,4 @@ export default function Method() {
     </div>
   )
 }
+

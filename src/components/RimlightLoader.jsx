@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 
 /**
- * Dribbble-inspired cinematic loader for Rimlight.
+ * Dribbble-inspired cinematic loader for Vesper.
  * Shows while data is loading, then fades out gracefully.
  */
-export default function RimlightLoader({ onDone }) {
+export default function VesperLoader({ onDone }) {
   const [phase, setPhase] = useState('enter') // 'enter' | 'scanning' | 'exit'
   const [progress, setProgress] = useState(0)
   const [statusMsg, setStatusMsg] = useState('INITIALISING EPHEMERIS')
@@ -43,7 +43,7 @@ export default function RimlightLoader({ onDone }) {
   }, [])
 
   return (
-    <div className={`rimlight-loader ${phase === 'exit' ? 'loader-exit' : ''}`} aria-live="polite">
+    <div className={`Vesper-loader ${phase === 'exit' ? 'loader-exit' : ''}`} aria-live="polite">
       {/* Deep space star field */}
       <div className="loader-stars">
         {Array.from({ length: 60 }, (_, i) => (
@@ -74,8 +74,8 @@ export default function RimlightLoader({ onDone }) {
 
           {/* Moon body */}
           <div className="loader-moon">
-            {/* Rimlight glow arc */}
-            <div className="loader-moon-rimlight" />
+            {/* Vesper glow arc */}
+            <div className="loader-moon-Vesper" />
             {/* Scanning sweep line */}
             <div className="loader-scan-sweep" />
           </div>
@@ -93,7 +93,7 @@ export default function RimlightLoader({ onDone }) {
 
         {/* Wordmark */}
         <div className="loader-wordmark">
-          <span className="loader-brand">RIMLIGHT</span>
+          <span className="loader-brand">Vesper</span>
           <span className="loader-brand-sub mono">NASA SPACE APPS 2026</span>
         </div>
 
@@ -119,3 +119,4 @@ export default function RimlightLoader({ onDone }) {
     </div>
   )
 }
+

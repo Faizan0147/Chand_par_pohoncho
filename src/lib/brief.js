@@ -52,7 +52,7 @@ export function briefContent({ site, sc, st, sp, v, eph, i0 }) {
 }
 
 export function briefFileName(site, sc) {
-  return `rimlight-brief-${site.id.replace(/[^a-z0-9_-]/gi, '_')}-${sc.d}${sc.slip ? `-slip${sc.slip}` : ''}.pdf`
+  return `vesper-brief-${site.id.replace(/[^a-z0-9_-]/gi, '_')}-${sc.d}${sc.slip ? `-slip${sc.slip}` : ''}.pdf`
 }
 
 /** Build the PDF and trigger the download. `validation` is public/data/validation.json or null. */
@@ -65,7 +65,7 @@ export async function buildBriefDoc({ site, sc, st, sp, v, eph, i0, i1, series, 
   const { jsPDF } = await import('jspdf')
   const b = briefContent({ site, sc, st, sp, v, eph, i0 })
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
-  doc.setProperties({ title: `Rimlight Site Brief - ${site.name}`, subject: 'Lunar landing site brief', creator: 'Rimlight' })
+  doc.setProperties({ title: `Vesper Site Brief - ${site.name}`, subject: 'Lunar landing site brief', creator: 'Vesper' })
   const W = 210, M = 16, CW = W - 2 * M
   let y = M
 
@@ -82,7 +82,7 @@ export async function buildBriefDoc({ site, sc, st, sp, v, eph, i0, i1, series, 
   const heading = (s, need = 20) => { room(need); y += 2; doc.setFont('helvetica', 'bold'); doc.setFontSize(11); color(C.ink); text(s, M, y); doc.setFont('helvetica', 'normal'); y += 5 }
 
   // Header
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(9); color(C.muted); text('RIMLIGHT SITE BRIEF', M, y)
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(9); color(C.muted); text('Vesper SITE BRIEF', M, y)
   doc.setFont('helvetica', 'normal'); text(`Generated ${fmtDate(now, true)}`, W - M, y, { align: 'right' }); y += 8
   doc.setFont('helvetica', 'bold'); doc.setFontSize(20); color(C.ink); text(b.title, M, y); doc.setFont('helvetica', 'normal'); y += 7
 
@@ -191,3 +191,5 @@ export async function buildBriefDoc({ site, sc, st, sp, v, eph, i0, i1, series, 
 
   return doc
 }
+
+
