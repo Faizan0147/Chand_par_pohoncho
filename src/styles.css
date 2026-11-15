@@ -534,19 +534,22 @@ a:hover { opacity: 0.8; }
   cursor: grabbing;
 }
 
-/* Target pills bar — full width, below any top-right HUD */
+/* Target pills bar — same row as solar HUD, clipped cleanly before it */
 .globe-targets-bar {
   position: absolute;
-  /* Second row: push down below the solar HUD pill (~46px tall) */
-  top: 56px;
+  top: 16px;
   left: 20px;
-  right: 20px;
+  /* Solar HUD is ~220px wide + 20px right margin = stop 245px from right */
+  right: 245px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   z-index: 5;
   flex-wrap: nowrap;
+  /* Clip pills that would overflow into the HUD zone */
   overflow: hidden;
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 .targets-title {
   font-size: 0.72rem;
@@ -554,6 +557,7 @@ a:hover { opacity: 0.8; }
   text-transform: uppercase;
   letter-spacing: 0.05em;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .target-pill-btn {
   background: rgba(255, 255, 255, 0.04);
@@ -565,6 +569,7 @@ a:hover { opacity: 0.8; }
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .target-pill-btn:hover {
   background: rgba(255, 255, 255, 0.1);
