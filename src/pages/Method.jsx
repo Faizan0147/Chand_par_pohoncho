@@ -56,7 +56,7 @@ export default function Method() {
         <li>NASA JPL Horizons System: validation reference.</li>
         <li>LRO LOLA lunar elevation models (NASA PDS / PGDA): terrain horizon source.</li>
         <li>Site positions: NASA Lunar Surface Data Book regions and LROC landing-site imagery (verify before citing).</li>
-        <li>Site map (Sites → Map): shaded relief computed from the LRO LOLA 80–90°S polar elevation model (LDEM_80S_*_ADJ) from the NASA GSFC Planetary Geodesy Data Archive (PGDA). Source: Barker et al. (2023), “A New View of the Lunar South Pole from LOLA”, Planet. Sci. J. 4, 183, doi:10.3847/PSJ/acf3e1; data doi:10.60903/gsfcpgda-lola-spole. Usage terms: PGDA asks that this paper be cited. Until the map is built from that DEM the app shows a labelled placeholder grid.</li>
+        <li>Site map (Sites → Map): shaded relief computed from the LRO LOLA 80–90°S polar elevation model (LDEM_80S_*_ADJ) from the NASA GSFC Planetary Geodesy Data Archive (PGDA). Source: Barker et al. (2023), “A New View of the Lunar South Pole from LOLA”, Planet. Sci. J. 4, 183, doi:10.3847/PSJ/acf3e1; data doi:10.60903/gsfcpgda-lola-spole. Usage terms: PGDA asks that this paper be cited.</li>
         <li>Permanently shadowed regions on the map (optional layer): LOLA-derived PSR polygons (LPSR_80S_20MPP_ADJ) from the same PGDA product and citation, simplified for display. Shown only once built from the downloaded data.</li>
       </ul>
     </div>

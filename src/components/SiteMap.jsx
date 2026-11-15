@@ -213,7 +213,8 @@ export default function SiteMap() {
           ? 'Background: grid only (placeholder, no terrain).'
           : <>Shaded relief from NASA LRO LOLA elevation data ({meta.source?.dems?.map(d => `${d.file}, ${d.native_m_per_px} m/px`).join('; ')}; Barker et al. 2023), shown at {Math.round(view.m_per_px)} m per image pixel, built {built}. Light comes from the upper left for readability; it is not the real Sun.{view.coverage_pct < 100 && ' Black areas are outside the elevation model.'}</>}
         {' '}Circles = works, diamonds = fails for the current scenario. Markers are not to scale; where markers would overlap they are nudged apart, with a thin line to the true position.
-        {psrPath && <> Blue: permanently shadowed regions ≥ {psr.views[view.id].min_area_km2} km² ({psr.source.file}, LOLA-derived, Barker et al. 2023).</>}
+        {/* shown whenever the layer exists (not only while it is on), so toggling it never reflows the page */}
+        {psrOk && psr.views?.[view.id] && <> Blue (when the layer is on): permanently shadowed regions ≥ {psr.views[view.id].min_area_km2} km² ({psr.source.file}, LOLA-derived, Barker et al. 2023).</>}
         {imgSrc && imgFailed[view.id] && <> The map image failed to load.</>}
       </p>
     </section>
