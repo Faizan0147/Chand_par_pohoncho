@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useData, useScenario } from '../lib/data.jsx'
 import { MAX_SLIP_DAYS } from '../lib/metrics.js'
 
@@ -5,6 +6,8 @@ import { MAX_SLIP_DAYS } from '../lib/metrics.js'
 export default function ScenarioBar() {
   const data = useData()
   const [sc, set] = useScenario()
+  // Phones only: the bar collapses to a one-line summary until tapped (desktop ignores this)
+  const [open, setOpen] = useState(false)
   if (data.status !== 'ready') return null
   const { eph } = data
   const minDate = new Date(eph.t0Ms).toISOString().slice(0, 10)
@@ -19,7 +22,21 @@ export default function ScenarioBar() {
   }
 
   return (
-    <section className="scenario" aria-label="Mission scenario">
+    <section className={`scenario${open ? ' scenario--open' : ''}`} aria-label="Mission scenario">
+      <button
+        type="button"
+        className="scenario-summary"
+        aria-expanded={open}
+        aria-controls="scenario-body"
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className="scenario-summary-txt mono">
+          {fmtDay(sc.d)} · {sc.len} d stay · slip {sc.slip} d
+        </span>
+        <span className="scenario-summary-cta">{open ? 'Done' : 'Edit'}</span>
+      </button>
+
+      <div className="scenario-body" id="scenario-body">
       <div className="scenario-main-row">
         <label>
           <span className="scenario-label-title">Planned landing (UTC)</span>
@@ -120,6 +137,12 @@ export default function ScenarioBar() {
           Full Lunar Cycle (29 d)
         </button>
       </div>
+      </div>
     </section>
   )
+}
+
+const fmtDay = d => {
+  const t = new Date(`${d}T00:00:00Z`)
+  return isNaN(t) ? d : t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
 }

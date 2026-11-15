@@ -38,6 +38,7 @@ export default function Home() {
       {/* 3. Technology Pillars: Fast, Precise & Client-Side */}
       <section className="home-section bento-section">
         <div className="section-header-tag mono">
+          <span className="dot-live" />
           <span>ENGINEERING ARCHITECTURE</span>
         </div>
         <h2 className="section-title">How Vesper Solves the Horizon Problem</h2>
@@ -107,6 +108,7 @@ export default function Home() {
           <div className="spotlight-header">
             <div>
               <div className="section-header-tag mono">
+                <span className="dot-live" />
                 <span>ARTEMIS CANDIDATE ZONES</span>
               </div>
               <h2 className="section-title">Premier South Polar Landing Sites</h2>
@@ -181,6 +183,7 @@ export default function Home() {
         <div className="credits-card">
           <div className="credits-top">
             <div className="section-header-tag mono">
+              <span className="dot-live" />
               <span>PROJECT CREDITS & ATTRIBUTION</span>
             </div>
             <h2>Built for NASA Space Apps Challenge 2026</h2>

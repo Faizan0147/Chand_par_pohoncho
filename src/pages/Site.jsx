@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Panorama from '../components/Panorama.jsx'
 import Timeline from '../components/Timeline.jsx'
@@ -40,6 +40,21 @@ function SiteView({ site }) {
     return () => clearInterval(t)
   }, [playing, i0, i1])
 
+  // Play first scrolls the horizon view up to sit just under the (sticky) play bar, so the animation is
+  // in frame. The jump is instant: a smooth scroll gets cancelled once playback starts re-rendering.
+  const panoRef = useRef(null)
+  const controlsRef = useRef(null)
+  const startPlaying = () => {
+    const pano = panoRef.current, bar = controlsRef.current
+    if (!pano || !bar) return setPlaying(true)
+    const stickyTop = parseFloat(getComputedStyle(bar).top) || 0
+    const maxY = document.documentElement.scrollHeight - window.innerHeight
+    const target = Math.max(0, Math.min(maxY, window.scrollY + pano.getBoundingClientRect().top - (stickyTop + bar.offsetHeight + 12)))
+    if (Math.abs(target - window.scrollY) < 8) return setPlaying(true)
+    window.scrollTo({ top: target, behavior: 'instant' })
+    setPlaying(true)
+  }
+
   const outOfData = i0 < 0 || i1 > series.n
   const i = Math.min(Math.max(cursor, i0, 0), Math.min(i1, series.n) - 1)
   const st = useMemo(() => windowStats(series, i0, i1), [series, i0, i1])
@@ -71,14 +86,16 @@ function SiteView({ site }) {
         {!v.ok && <> — {v.reasons.join('; ')}.</>}
       </div>
 
-      <div className="controls panel">
-        <button type="button" className="btn" onClick={() => setPlaying(p => !p)}>{playing ? '⏸ Pause' : '▶ Play'}</button>
+      <div className="controls panel" ref={controlsRef}>
+        <button type="button" className="btn" onClick={() => (playing ? setPlaying(false) : startPlaying())}>{playing ? '⏸ Pause' : '▶ Play'}</button>
         <input type="range" aria-label="Time within the mission window" min={i0} max={i1 - 1} value={i}
           onChange={e => { setPlaying(false); setCursor(Number(e.target.value)) }} />
         <span className="clock">{fmtDate(dateFromIdx(eph, i), true)}</span>
       </div>
 
-      <Panorama site={site} series={series} i={i} />
+      <div ref={panoRef}>
+        <Panorama site={site} series={series} i={i} />
+      </div>
 
       <div className="grid4">
         <Stat label="Sun elevation" value={`${series.sunEl[i].toFixed(1)}°`} tone={series.sunLit[i] ? 'ok' : 'bad'}
@@ -114,7 +131,7 @@ function SiteView({ site }) {
       <div className="panel">
         <p>{slipSentence(sp, sc)}</p>
         <SlipStrip cells={sp.cells} slip={sc.slip} onPick={d => set({ slip: d })} />
-        <p className="muted small">Each box is one day of slip (0 → 30). Green: requirements met. Red: not met. Outlined: the slip currently selected. Click a box to try it.</p>
+        <p className="muted small">Each box is one day of slip (0 → 30). Copper: requirements met. Slate: not met. Outlined: the slip currently selected. Click a box to try it.</p>
       </div>
       {site.note && <p className="muted small">{site.note}</p>}
     </>

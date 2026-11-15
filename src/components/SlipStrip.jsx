@@ -1,5 +1,5 @@
 /**
- * One cell per slip day (0..30): green = requirements met if the landing slips that many days.
+ * One cell per slip day (0..30): copper = requirements met, slate = not met if the landing slips that many days.
  * `compact` keeps all 31 cells on a single row (used inside the Compare table); otherwise the
  * strip wraps into numbered, finger-sized boxes on phones (see mobile.css).
  */

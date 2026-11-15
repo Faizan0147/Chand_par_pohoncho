@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import HeroHorizon from './HeroHorizon.jsx'
 import { useKeepSearch } from '../lib/data.jsx'
 
 export default function HeroLanding() {
   const link = useKeepSearch()
   const canvasRef = useRef(null)
   const containerRef = useRef(null)
+  const copyZoneRef = useRef(null)
+  const tipRef = useRef(null)
   const [showScience, setShowScience] = useState(false)
   
   // Dynamic solar angle control (in degrees, 0..360)
@@ -28,9 +31,19 @@ export default function HeroLanding() {
   const targetRotation = useRef(0)
   const mouseTilt = useRef({ x: 0, y: 0 })
 
+  // Animation sync refs — allow 60fps continuous frame motion without effect teardown
+  const autoRotRef = useRef(0.8)
+  const sunAngleRef = useRef(sunAngle)
+  sunAngleRef.current = sunAngle
+  const autoSunRef = useRef(autoSun)
+  autoSunRef.current = autoSun
+  const selectedSiteRef = useRef(selectedSite)
+  selectedSiteRef.current = selectedSite
+
   // Select a site and automatically rotate globe to face it
   const handleSelectSite = site => {
     setSelectedSite(site)
+    selectedSiteRef.current = site
     // Orient globe so site longitude faces viewer
     const desiredRot = -((site.lon * Math.PI) / 180) + Math.PI / 2
     targetRotation.current = desiredRot - rotationOffset.current
@@ -42,7 +55,6 @@ export default function HeroLanding() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     let animationId
-    let autoRot = 0.8
 
     // Pre-generate spherical point cloud points (Fibonacci sphere distribution)
     const NUM_POINTS = 1150
@@ -77,15 +89,20 @@ export default function HeroLanding() {
       const cy = (H - 45) / 2
       const R = Math.min(W * 0.44, H * 0.40, 168)
 
-      // Smooth rotation with user drag damping
+      // When animation is playing, rotate frame automatically in sync with solar motion
       if (!isDragging.current) {
-        autoRot += 0.0025
+        if (autoSunRef.current) {
+          autoRotRef.current += 0.0035 // dynamic active frame motion
+        } else {
+          autoRotRef.current += 0.0008 // gentle ambient drift
+        }
       }
       rotationOffset.current += (targetRotation.current - rotationOffset.current) * 0.06
-      const currentRot = autoRot + rotationOffset.current
+      const currentRot = autoRotRef.current + rotationOffset.current
 
-      // Dynamic Sun Vector from sunAngle
-      const sunRad = (sunAngle * Math.PI) / 180
+      // Dynamic Sun Vector from sunAngleRef
+      const curSunAngle = sunAngleRef.current
+      const sunRad = (curSunAngle * Math.PI) / 180
       const lx = Math.cos(sunRad) * 0.85
       const ly = -0.32
       const lz = Math.sin(sunRad) * 0.85
@@ -168,8 +185,9 @@ export default function HeroLanding() {
       ctx.stroke()
       ctx.setLineDash([])
 
-      // Selected Landing Site Pin with Callout
-      const siteRad = (selectedSite.lon * Math.PI) / 180 + currentRot
+      // Selected Landing Site Pin with Callout (tracks rotating globe)
+      const curSite = selectedSiteRef.current
+      const siteRad = (curSite.lon * Math.PI) / 180 + currentRot
       const pinX = cx + R * 0.35 * Math.sin(siteRad)
       const pinY = cy + R * 0.54
 
@@ -185,9 +203,21 @@ export default function HeroLanding() {
       ctx.arc(pinX, pinY, 2, 0, Math.PI * 2)
       ctx.fill()
 
-      // Hairline callout line to right
-      const calloutX = Math.min(W - 140, cx + R + 35)
+      // Hairline callout line to right — clamped so the widest line still fits inside the canvas
+      const narrow = W < 480
+      const detail = narrow ? `~${curSite.illum} lit · slip ${curSite.slip}` : `Illumination ~${curSite.illum} · Slip ${curSite.slip}`
+      ctx.font = '10px JetBrains Mono, monospace'
+      const textW = Math.max(ctx.measureText(detail).width, ctx.measureText(`${Math.abs(curSite.lat).toFixed(2)}°S, ${curSite.lon.toFixed(1)}°E`).width, 120)
+      const calloutX = Math.max(12, Math.min(W - textW - 12, cx + R + 35))
       const calloutY = cy - 20
+
+      // When the callout has to sit over the globe (phones), give it a backing plate
+      if (calloutX < cx + R) {
+        ctx.fillStyle = 'rgba(4, 5, 7, 0.78)'
+        ctx.beginPath()
+        ctx.roundRect?.(calloutX - 8, calloutY - 20, textW + 16, 46, 6)
+        ctx.fill()
+      }
 
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'
       ctx.lineWidth = 1
@@ -201,12 +231,12 @@ export default function HeroLanding() {
       ctx.font = '600 11px Plus Jakarta Sans, sans-serif'
       ctx.fillStyle = '#ffffff'
       ctx.textAlign = 'left'
-      ctx.fillText(selectedSite.name, calloutX, calloutY - 6)
+      ctx.fillText(curSite.name, calloutX, calloutY - 6)
 
       ctx.fillStyle = 'rgba(148, 163, 184, 0.85)'
       ctx.font = '10px JetBrains Mono, monospace'
-      ctx.fillText(`${Math.abs(selectedSite.lat).toFixed(2)}°S, ${selectedSite.lon.toFixed(1)}°E`, calloutX, calloutY + 8)
-      ctx.fillText(`Illumination ~${selectedSite.illum} · Slip ${selectedSite.slip}`, calloutX, calloutY + 20)
+      ctx.fillText(`${Math.abs(curSite.lat).toFixed(2)}°S, ${curSite.lon.toFixed(1)}°E`, calloutX, calloutY + 8)
+      ctx.fillText(detail, calloutX, calloutY + 20)
 
       ctx.restore()
       animationId = requestAnimationFrame(render)
@@ -217,14 +247,14 @@ export default function HeroLanding() {
     return () => {
       cancelAnimationFrame(animationId)
     }
-  }, [selectedSite, sunAngle])
+  }, [])
 
   // Auto-rotate sun when active
   useEffect(() => {
     if (!autoSun) return
     const timer = setInterval(() => {
-      setSunAngle(prev => (prev + 0.4) % 360)
-    }, 40)
+      setSunAngle(prev => (prev + 0.35) % 360)
+    }, 35)
     return () => clearInterval(timer)
   }, [autoSun])
 
@@ -236,6 +266,11 @@ export default function HeroLanding() {
 
   const handlePointerMove = e => {
     const rect = canvasRef.current?.getBoundingClientRect()
+    const tip = tipRef.current
+    if (tip && rect) {
+      tip.style.transform = `translate(${e.clientX - rect.left + 14}px, ${e.clientY - rect.top + 16}px)`
+      tip.classList.toggle('show', !isDragging.current)
+    }
     if (rect) {
       const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 0.08
       const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 0.08
@@ -248,16 +283,18 @@ export default function HeroLanding() {
     targetRotation.current += dx * 0.008
   }
 
-  const handlePointerUp = () => {
+  const handlePointerUp = e => {
     isDragging.current = false
+    if (e?.type === 'pointerleave') tipRef.current?.classList.remove('show')
   }
 
   return (
     <section className="hero-landing" ref={containerRef}>
       {/* 1. Header Hero Typography */}
+      <div className="hero-copy-zone" ref={copyZoneRef}>
       <div className="hero-center-copy">
         <div className="hero-pill-badge">
-          <span className="badge-pulse-dot" />
+          <span className="dot-live" />
           <span>NASA SPACE APPS 2026 · LUNAR SOUTH POLE NAVIGATOR</span>
         </div>
 
@@ -287,6 +324,8 @@ export default function HeroLanding() {
             <span>Launch 3D Celestial Orbit ✦</span>
           </Link>
         </div>
+      </div>
+      <HeroHorizon zoneRef={copyZoneRef} />
       </div>
 
       {/* 2. Visual Centerpiece: Interactive 3D Point-Cloud Globe with Solar Scrubber */}
@@ -340,12 +379,10 @@ export default function HeroLanding() {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
-          title="Drag to rotate the Moon"
+          aria-label="Moon globe: drag to rotate"
         />
 
-        <div className="globe-hint mono">
-          <span>✦ Drag to rotate Moon · Scrubber simulates solar grazing rays</span>
-        </div>
+        <div className="globe-cursor-tip mono" ref={tipRef} aria-hidden="true">Drag to rotate</div>
 
         {/* Technical telemetry row at bottom */}
         <div className="hero-bottom-telemetry mono">
@@ -373,13 +410,16 @@ export default function HeroLanding() {
         <button
           type="button"
           className="science-toggle-btn"
+          aria-expanded={showScience}
           onClick={() => setShowScience(prev => !prev)}
         >
           <span>{showScience ? 'Hide scientific architecture' : 'How it works: 360° ray-marching & ephemeris'}</span>
-          <span className="science-arrow">{showScience ? '↑' : '↓'}</span>
+          <span className={`science-arrow${showScience ? ' open' : ''}`} aria-hidden="true">↓</span>
         </button>
 
-        {showScience && (
+        {/* Always mounted so it can animate open/closed (grid-rows 0fr → 1fr); inert while closed */}
+        <div className={`science-collapse${showScience ? ' open' : ''}`} {...(!showScience && { inert: '' })}>
+          <div className="science-collapse-inner">
           <div className="hero-architecture-wrap">
             <div className="arch-editorial-head">
               <h2>Terrain-accurate orbital planning</h2>
@@ -415,7 +455,8 @@ export default function HeroLanding() {
               </div>
             </div>
           </div>
-        )}
+          </div>
+        </div>
       </div>
     </section>
   )

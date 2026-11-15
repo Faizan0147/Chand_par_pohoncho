@@ -4,19 +4,11 @@
 .cell span { font-size: 0; }             /* day numbers are only shown in the roomy (phone) strip */
 span.cell { display: block; cursor: default; }
 
-/* header: keep the nav on one line */
-.top { gap: 8px; flex-wrap: wrap; }
-nav a { white-space: nowrap; }
-
 /* play row: slider must stay usable */
 .controls { flex-wrap: wrap; }
 .controls input[type=range] { min-width: 140px; }
 
 @media (max-width: 720px) {
-  .top { padding-top: 10px; }
-  .brand { font-size: 1.05rem; }
-  nav { gap: 0; }
-  nav a { padding: 8px 9px; font-size: .92rem; }
   .clock { flex-basis: 100%; }
   .pano { padding: 6px 4px; }
   .pano figcaption { padding: 6px 6px 2px; font-size: .8rem; }
@@ -25,8 +17,8 @@ nav a { white-space: nowrap; }
 
   /* slip strip: numbered, finger-sized boxes in rows (Compare keeps its compact single row) */
   .slipstrip:not(.compact) { grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 4px; }
-  .slipstrip:not(.compact) .cell { height: 34px; border-radius: 6px; color: #04110b; font-weight: 700; }
-  .slipstrip:not(.compact) .cell.bad { color: #1b0507; }
+  .slipstrip:not(.compact) .cell { height: 34px; border-radius: 6px; color: var(--on-slip-go); font-weight: 700; }
+  .slipstrip:not(.compact) .cell.bad { color: var(--on-slip-no); }
   .slipstrip:not(.compact) .cell span { font-size: .8rem; }
 
   /* compare: fit three sites without sideways scrolling */
