@@ -1,12 +1,40 @@
-node_modules
-dist
-dist-preview
-.venv
-__pycache__
-pipeline/.horizons_cache
-pipeline/dem/*.tif
+# dependencies
+node_modules/
 
-*.bak
+# build output
+dist/
+dist-preview/
+
+# python environment and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# large / generated data (re-created by pipeline/fetch_dems.py)
 pipeline/dem/*
 !pipeline/dem/.gitkeep
+*.npy
+pipeline/.horizons_cache/
+pipeline/kernels/*.bpc
+
+# local snapshots used while checking a rebuild
+*.bak
+
+# secrets and local environment
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# OS and editor noise
 .DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

@@ -2,10 +2,13 @@
 Compare OUR Sun/Earth azimuth+elevation with JPL Horizons for the same site and times.
 Writes public/data/validation.json, which the Method page displays.
 
-!! NOT RUN IN THE ENVIRONMENT THIS PROJECT WAS GENERATED IN (JPL hosts were unreachable). !!
-Run it on your own machine with internet:   python pipeline/validate_horizons.py
+Last run: 14 Nov 2026 (results in public/data/validation.json). Rerun with internet:
+    python pipeline/validate_horizons.py
 Horizons fair-use: one request at a time (this script is sequential). Results are cached in
-pipeline/.horizons_cache/. If the CSV layout differs, fix parse_rows() - that is the only fragile part.
+pipeline/.horizons_cache/ (keyed by site + window, so a changed window never reuses a stale
+table). If the CSV layout differs from what parse_rows() expects, fix parse_rows() - that is
+the only fragile part. On any failure the script exits non-zero and leaves an existing
+validation.json untouched.
 """
 import json, os, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timedelta, timezone
@@ -20,6 +23,14 @@ CACHE = os.path.join(HERE, ".horizons_cache")
 SITES = ["connecting-ridge", "shackleton-rim", "im2-athena"]
 START = datetime(2026, 12, 1, tzinfo=timezone.utc)
 N_STEPS, STEP_H = 48, 6
+OUT = os.path.join(HERE, "..", "public", "data", "validation.json")
+
+
+def die(msg):
+    """Fail loudly without touching an existing validation.json."""
+    print(f"ERROR: {msg}", file=sys.stderr)
+    print("public/data/validation.json was NOT changed.", file=sys.stderr)
+    sys.exit(1)
 
 
 def horizons(command, lat, lon):
@@ -32,17 +43,26 @@ def horizons(command, lat, lon):
         "START_TIME": f"'{START:%Y-%m-%d %H:%M}'", "STOP_TIME": f"'{stop:%Y-%m-%d %H:%M}'",
         "STEP_SIZE": f"'{STEP_H} h'", "QUANTITIES": "'4'", "ANG_FORMAT": "'DEG'", "CSV_FORMAT": "'YES'",
     }
-    key = os.path.join(CACHE, f"{command}_{lat}_{lon}.txt")
+    # key includes the window so a changed START/N_STEPS never reuses a stale table
+    key = os.path.join(CACHE, f"{command}_{lat}_{lon}_{START:%Y%m%d}_{N_STEPS}x{STEP_H}h.txt")
     if os.path.exists(key):
-        return open(key).read()
+        return open(key).read(), key
     url = API + "?" + urllib.parse.urlencode(params)
-    txt = urllib.request.urlopen(url, timeout=60).read().decode()
+    try:
+        txt = urllib.request.urlopen(url, timeout=60).read().decode()
+    except OSError as e:                                # URLError, HTTPError, timeout
+        die(f"could not reach JPL Horizons ({e}). Check the internet connection and rerun.")
     open(key, "w").write(txt)
     time.sleep(1.0)                                    # be polite: sequential, never parallel
-    return txt
+    return txt, key
 
 
-def parse_rows(txt):
+def parse_rows(txt, source="Horizons response"):
+    if "$$SOE" not in txt:
+        detail = next((ln.strip() for ln in txt.splitlines() if ln.strip() and not ln.startswith("*")
+                       and "API" not in ln), "")[:200]
+        die(f"{source} contains no ephemeris table. {detail}\n"
+            f"If a cached file is stale or corrupt, delete it and rerun.")
     rows = txt.split("$$SOE")[1].split("$$EOE")[0].strip().splitlines()
     out = []
     for r in rows:
@@ -69,7 +89,11 @@ def main():
     for sid in SITES:
         s = sites[sid]
         for body, cmd in (("Sun", "10"), ("Earth", "399")):
-            h = parse_rows(horizons(cmd, s["lat"], s["lon"]))
+            txt, src = horizons(cmd, s["lat"], s["lon"])
+            h = parse_rows(txt, source=src)
+            if len(h) != len(jd):
+                die(f"{src}: {len(h)} rows, expected {len(jd)} (window {START:%Y-%m-%d}, "
+                    f"step {STEP_H} h). Delete the file and rerun.")
             ours = []
             for i in range(len(jd)):
                 _, _, up = az_el(sun[i], s["lat"], s["lon"])
@@ -84,7 +108,8 @@ def main():
                                    "elMaxAbsDeg": float(np.abs(d_el).max()), "elRmsDeg": float(np.sqrt((d_el**2).mean())),
                                    "azMaxAbsDeg": float(np.abs(d_az).max()), "samples": int(n)})
             print(f"{s['name']:28s} {body:5s} el max|d|={np.abs(d_el).max():.4f} deg  az max|d|={np.abs(d_az).max():.4f} deg")
-    json.dump(result, open(os.path.join(HERE, "..", "public", "data", "validation.json"), "w"), indent=1)
+    json.dump(result, open(OUT, "w"), indent=1)
+    print(f"wrote {os.path.normpath(OUT)}")
 
 
 if __name__ == "__main__":

@@ -7,15 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node scripts/crosscheck.mjs && node scripts/test_map.mjs",
+    "test": "node scripts/crosscheck.mjs && node scripts/test_map.mjs && node scripts/test_brief.mjs",
     "build:preview": "vite build --config vite.single.config.js && node scripts/make_preview.mjs"
   },
   "dependencies": {
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
+    "jspdf": "4.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "suncalc": "1.9.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

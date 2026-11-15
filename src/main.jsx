@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
 import { DataProvider } from './lib/data.jsx'
 import './styles.css'
+import './mobile.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

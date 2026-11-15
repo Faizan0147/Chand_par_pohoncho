@@ -3,3 +3,4 @@ rasterio
 pyproj
 de421
 jplephem==1.2
+spiceypy          # only for pipeline/check_frame.py (frame-offset verification)

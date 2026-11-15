@@ -1,0 +1,56 @@
+/* Phone / touch / accessibility polish (M3). Loaded after styles.css so it only overrides. */
+:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+.cell { display: block; }
+.cell span { font-size: 0; }             /* day numbers are only shown in the roomy (phone) strip */
+span.cell { display: block; cursor: default; }
+
+/* header: keep the nav on one line */
+.top { gap: 8px; flex-wrap: wrap; }
+nav a { white-space: nowrap; }
+
+/* play row: slider must stay usable */
+.controls { flex-wrap: wrap; }
+.controls input[type=range] { min-width: 140px; }
+
+@media (max-width: 720px) {
+  .top { padding-top: 10px; }
+  .brand { font-size: 1.05rem; }
+  nav { gap: 0; }
+  nav a { padding: 8px 9px; font-size: .92rem; }
+  .clock { flex-basis: 100%; }
+  .pano { padding: 6px 4px; }
+  .pano figcaption { padding: 6px 6px 2px; font-size: .8rem; }
+  .panel { padding: 12px; }
+  .stat { padding: 10px 12px; } .stat-v { font-size: 1.35rem; }
+
+  /* slip strip: numbered, finger-sized boxes in rows (Compare keeps its compact single row) */
+  .slipstrip:not(.compact) { grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 4px; }
+  .slipstrip:not(.compact) .cell { height: 34px; border-radius: 6px; color: #04110b; font-weight: 700; }
+  .slipstrip:not(.compact) .cell.bad { color: #1b0507; }
+  .slipstrip:not(.compact) .cell span { font-size: .8rem; }
+
+  /* compare: fit three sites without sideways scrolling */
+  .cmp { min-width: 0; table-layout: fixed; }
+  .cmp th, .cmp td { padding: 8px 4px; font-size: .82rem; word-wrap: break-word; }
+  .cmp tbody th { white-space: normal; width: 27%; font-size: .78rem; }
+  .cmp thead th small, .cmp thead .muted { display: none; }
+  .cmp .slipstrip { gap: 1px; }
+  .cmp .cell { height: 14px; }
+}
+
+/* touch devices: bigger targets */
+@media (pointer: coarse) {
+  .btn, input, select { min-height: 44px; }
+  nav a { min-height: 40px; display: inline-flex; align-items: center; }
+  .check input, .req input[type=checkbox] { width: 22px; height: 22px; }
+  .linkbtn { padding: 8px 4px; }
+  .req summary { padding: 11px 0; }
+  input[type=range] { min-height: 32px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+@media (max-width: 720px) { .cmp thead th a { font-size: .76rem; font-weight: 600; } .cmp thead th { padding-left: 2px; padding-right: 2px; } }
+
+/* Moon vs home */
+.mvh-head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; margin-bottom: 10px; }
+.mvh-head label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+.mvh-head input { width: 110px; }

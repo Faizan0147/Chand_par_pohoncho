@@ -2,7 +2,7 @@ import { scaleLinear } from 'd3-scale'
 import { area } from 'd3-shape'
 import { maskAt } from '../lib/geometry.js'
 
-const W = 920, H = 360, M = { l: 44, r: 14, t: 14, b: 32 }
+import { useWidth } from '../lib/useWidth.js'
 
 function trackPath(az, el, j0, j1, x, y) {
   let d = '', prev = null
@@ -16,6 +16,12 @@ function trackPath(az, el, j0, j1, x, y) {
 
 /** 360-degree horizon panorama: terrain silhouette + Sun and Earth tracks at the chosen time. */
 export default function Panorama({ site, series, i }) {
+  // Drawn 1:1 in CSS pixels so labels stay readable on a phone (width = the panel's inner width).
+  const [ref, svgW] = useWidth(920)
+  const W = Math.max(280, svgW - 16)
+  const small = W < 560
+  const H = small ? 300 : 360
+  const M = { l: small ? 34 : 44, r: small ? 10 : 14, t: 14, b: 32 }
   const top = Math.max(10, Math.ceil((90 - Math.abs(site.lat) + 9) / 2) * 2)
   const bottom = -3
   const x = scaleLinear().domain([0, 360]).range([M.l, W - M.r])
@@ -32,8 +38,8 @@ export default function Panorama({ site, series, i }) {
   const yTicks = y.ticks(6).filter(t => t >= bottom)
 
   return (
-    <figure className="panel pano">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img"
+    <figure className="panel pano" ref={ref}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img"
         aria-label={`Horizon panorama for ${site.name}. Sun is ${series.sunLit[i] ? 'above' : 'hidden by'} the terrain horizon; Earth is ${series.earthVis[i] ? 'in view' : 'out of view'}.`}>
         <rect x={M.l} y={M.t} width={W - M.l - M.r} height={H - M.t - M.b} fill="#04060b" />
         {yTicks.map(t => (
@@ -45,7 +51,7 @@ export default function Panorama({ site, series, i }) {
         {[[0, 'N'], [90, 'E'], [180, 'S'], [270, 'W'], [360, 'N']].map(([a, l]) => (
           <g key={a}>
             <line x1={x(a)} x2={x(a)} y1={M.t} y2={H - M.b} stroke="#161d2b" />
-            <text x={x(a)} y={H - 10} textAnchor="middle" className="tick strong">{l} {a}°</text>
+            <text x={x(a)} y={H - 10} textAnchor={a === 0 ? 'start' : a === 360 ? 'end' : 'middle'} className="tick strong">{l} {a}°</text>
           </g>
         ))}
         {/* tracks +-48 h around the chosen time */}
@@ -61,11 +67,11 @@ export default function Panorama({ site, series, i }) {
             <g key={b.key}>
               {blocked && b.el[i] > bottom && <line x1={cx} x2={cx} y1={cy} y2={maskY} stroke="var(--bad)" strokeWidth="1.5" strokeDasharray="3 3" />}
               <circle cx={cx} cy={cy} r={b.key === 'sun' ? 9 : 8} fill={blocked ? '#0b0e14' : b.color} stroke={b.color} strokeWidth="2" />
-              <text x={cx + 13} y={cy - 9} className="label" fill={b.color}>{b.label}{blocked ? ' (hidden)' : ''} {b.el[i].toFixed(1)}°</text>
+              <text x={cx > W * 0.62 ? cx - 13 : cx + 13} y={cy - 9} textAnchor={cx > W * 0.62 ? 'end' : 'start'} className="label" fill={b.color}>{b.label}{blocked ? ' (hidden)' : ''} {b.el[i].toFixed(1)}°</text>
             </g>
           )
         })}
-        <text x={W - M.r} y={M.t - 4} textAnchor="end" className="tick">elevation above local horizontal</text>
+        {!small && <text x={W - M.r} y={M.t - 4} textAnchor="end" className="tick">elevation above local horizontal</text>}
       </svg>
       <figcaption className="muted small">
         Azimuth runs left to right from north. Vertical scale is stretched about ×{stretch} so a 1–2° ridge is visible; marker sizes are not to scale.
