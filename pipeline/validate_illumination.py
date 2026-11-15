@@ -120,6 +120,15 @@ CANDS = [
     ("im1-odysseus       80.1300 1.440", -80.1300, 1.440, "IM-1"),
 ]
 
+# The coordinates the app actually ships (pipeline/sites.json), so the numbers quoted in
+# docs/M1-STATUS.md for the chosen points can be reproduced with this script.
+import json
+PUBLISHED = {"connecting-ridge": "Mazarico pt1: 89.0%", "shackleton-rim": "Mazarico pt4: 86.7% / Speyerer 71.6%",
+             "peak-near-shackleton": "Mazarico pt7: 85.5%", "de-gerlache-rim": "Mazarico pt11: 85.6%"}
+for s in json.load(open(os.path.join(HERE, "sites.json")))["sites"]:
+    if s["id"] in PUBLISHED:
+        CANDS.append((f"{s['id']:20s} CURRENT {s['lon']:.2f}", s["lat"], s["lon"], PUBLISHED[s["id"]]))
+
 print(f"\n{'candidate':36s} {'z0':>8s} {'hz max':>7s} {'illum%':>7s} {'vis%':>7s}  published")
 print("-" * 100)
 for name, la, lo, pub in CANDS:
