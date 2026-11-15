@@ -4,7 +4,8 @@ A constant lon shift => different frames (e.g. IAU30135 Moon2015 vs MOON_ME).
 
 Inputs: the original PGDA 5 m/px site tiles, not the 20 m/px crops that
 pipeline/fetch_dems.py writes into pipeline/dem/. Re-download the tiles from the
-SiteNN URLs in docs/M1-STATUS.md to re-run this check.
+SiteNN URLs (https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/SiteNN/SiteNN_final_adj_5mpp_surf.tif)
+to re-run this check.
 """
 import os
 

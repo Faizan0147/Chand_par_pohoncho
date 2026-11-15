@@ -121,7 +121,7 @@ CANDS = [
 ]
 
 # The coordinates the app actually ships (pipeline/sites.json), so the numbers quoted in
-# docs/M1-STATUS.md for the chosen points can be reproduced with this script.
+# the README for the chosen points can be reproduced with this script.
 import json
 PUBLISHED = {"connecting-ridge": "Mazarico pt1: 89.0%", "shackleton-rim": "Mazarico pt4: 86.7% / Speyerer 71.6%",
              "peak-near-shackleton": "Mazarico pt7: 85.5%", "de-gerlache-rim": "Mazarico pt11: 85.6%"}
