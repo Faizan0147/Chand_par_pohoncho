@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import HeroHorizon from './HeroHorizon.jsx'
 import { useKeepSearch } from '../lib/data.jsx'
 
 export default function HeroLanding() {
   const link = useKeepSearch()
   const canvasRef = useRef(null)
   const containerRef = useRef(null)
+  const copyZoneRef = useRef(null)
+  const tipRef = useRef(null)
   const [showScience, setShowScience] = useState(false)
   
   // Dynamic solar angle control (in degrees, 0..360)
@@ -200,9 +203,21 @@ export default function HeroLanding() {
       ctx.arc(pinX, pinY, 2, 0, Math.PI * 2)
       ctx.fill()
 
-      // Hairline callout line to right
-      const calloutX = Math.min(W - 140, cx + R + 35)
+      // Hairline callout line to right — clamped so the widest line still fits inside the canvas
+      const narrow = W < 480
+      const detail = narrow ? `~${curSite.illum} lit · slip ${curSite.slip}` : `Illumination ~${curSite.illum} · Slip ${curSite.slip}`
+      ctx.font = '10px JetBrains Mono, monospace'
+      const textW = Math.max(ctx.measureText(detail).width, ctx.measureText(`${Math.abs(curSite.lat).toFixed(2)}°S, ${curSite.lon.toFixed(1)}°E`).width, 120)
+      const calloutX = Math.max(12, Math.min(W - textW - 12, cx + R + 35))
       const calloutY = cy - 20
+
+      // When the callout has to sit over the globe (phones), give it a backing plate
+      if (calloutX < cx + R) {
+        ctx.fillStyle = 'rgba(4, 5, 7, 0.78)'
+        ctx.beginPath()
+        ctx.roundRect?.(calloutX - 8, calloutY - 20, textW + 16, 46, 6)
+        ctx.fill()
+      }
 
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'
       ctx.lineWidth = 1
@@ -221,7 +236,7 @@ export default function HeroLanding() {
       ctx.fillStyle = 'rgba(148, 163, 184, 0.85)'
       ctx.font = '10px JetBrains Mono, monospace'
       ctx.fillText(`${Math.abs(curSite.lat).toFixed(2)}°S, ${curSite.lon.toFixed(1)}°E`, calloutX, calloutY + 8)
-      ctx.fillText(`Illumination ~${curSite.illum} · Slip ${curSite.slip}`, calloutX, calloutY + 20)
+      ctx.fillText(detail, calloutX, calloutY + 20)
 
       ctx.restore()
       animationId = requestAnimationFrame(render)
@@ -251,6 +266,11 @@ export default function HeroLanding() {
 
   const handlePointerMove = e => {
     const rect = canvasRef.current?.getBoundingClientRect()
+    const tip = tipRef.current
+    if (tip && rect) {
+      tip.style.transform = `translate(${e.clientX - rect.left + 14}px, ${e.clientY - rect.top + 16}px)`
+      tip.classList.toggle('show', !isDragging.current)
+    }
     if (rect) {
       const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 0.08
       const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 0.08
@@ -263,16 +283,18 @@ export default function HeroLanding() {
     targetRotation.current += dx * 0.008
   }
 
-  const handlePointerUp = () => {
+  const handlePointerUp = e => {
     isDragging.current = false
+    if (e?.type === 'pointerleave') tipRef.current?.classList.remove('show')
   }
 
   return (
     <section className="hero-landing" ref={containerRef}>
       {/* 1. Header Hero Typography */}
+      <div className="hero-copy-zone" ref={copyZoneRef}>
       <div className="hero-center-copy">
         <div className="hero-pill-badge">
-          <span className="badge-pulse-dot" />
+          <span className="dot-live" />
           <span>NASA SPACE APPS 2026 · LUNAR SOUTH POLE NAVIGATOR</span>
         </div>
 
@@ -302,6 +324,8 @@ export default function HeroLanding() {
             <span>Launch 3D Celestial Orbit ✦</span>
           </Link>
         </div>
+      </div>
+      <HeroHorizon zoneRef={copyZoneRef} />
       </div>
 
       {/* 2. Visual Centerpiece: Interactive 3D Point-Cloud Globe with Solar Scrubber */}
@@ -355,12 +379,10 @@ export default function HeroLanding() {
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
-          title="Drag to rotate the Moon"
+          aria-label="Moon globe: drag to rotate"
         />
 
-        <div className="globe-hint mono">
-          <span>✦ Drag to rotate Moon · Scrubber simulates solar grazing rays</span>
-        </div>
+        <div className="globe-cursor-tip mono" ref={tipRef} aria-hidden="true">Drag to rotate</div>
 
         {/* Technical telemetry row at bottom */}
         <div className="hero-bottom-telemetry mono">
@@ -388,13 +410,16 @@ export default function HeroLanding() {
         <button
           type="button"
           className="science-toggle-btn"
+          aria-expanded={showScience}
           onClick={() => setShowScience(prev => !prev)}
         >
           <span>{showScience ? 'Hide scientific architecture' : 'How it works: 360° ray-marching & ephemeris'}</span>
-          <span className="science-arrow">{showScience ? '↑' : '↓'}</span>
+          <span className={`science-arrow${showScience ? ' open' : ''}`} aria-hidden="true">↓</span>
         </button>
 
-        {showScience && (
+        {/* Always mounted so it can animate open/closed (grid-rows 0fr → 1fr); inert while closed */}
+        <div className={`science-collapse${showScience ? ' open' : ''}`} {...(!showScience && { inert: '' })}>
+          <div className="science-collapse-inner">
           <div className="hero-architecture-wrap">
             <div className="arch-editorial-head">
               <h2>Terrain-accurate orbital planning</h2>
@@ -430,7 +455,8 @@ export default function HeroLanding() {
               </div>
             </div>
           </div>
-        )}
+          </div>
+        </div>
       </div>
     </section>
   )

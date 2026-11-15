@@ -2,34 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import ScenarioBar from './components/ScenarioBar.jsx'
 import VesperLoader from './components/RimlightLoader.jsx'
+import VesperLogo from './components/VesperLogo.jsx'
 import { useData, useKeepSearch } from './lib/data.jsx'
 import Compare from './pages/Compare.jsx'
 import Home from './pages/Home.jsx'
 import Method from './pages/Method.jsx'
 import Pick from './pages/Pick.jsx'
 import Site from './pages/Site.jsx'
-
-/* ── Vesper Logo — geometric V lettermark, aerospace grade ── */
-function VesperLogo() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="brand-logo-svg">
-      {/* Background pill — dark card shape, like a mission badge */}
-      <rect x="1" y="1" width="30" height="30" rx="8" fill="#0d0f16" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
-
-      {/* The V — two angled strokes meeting at the bottom point */}
-      {/* Left arm of V */}
-      <line x1="7" y1="9" x2="16" y2="23" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round"/>
-      {/* Right arm of V */}
-      <line x1="25" y1="9" x2="16" y2="23" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round"/>
-
-      {/* Horizon crossbar — the grazing ray, Vesper's core concept */}
-      <line x1="9" y1="17" x2="23" y2="17" stroke="rgba(253,230,138,0.6)" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="2.5 2"/>
-
-      {/* Landing site dot at the V apex */}
-      <circle cx="16" cy="23" r="1.8" fill="var(--sun-flare, #fde68a)"/>
-    </svg>
-  )
-}
 
 /* ── Sun / Moon icons for light-dark toggle ── */
 function IconSun() {
@@ -70,8 +49,6 @@ export default function App() {
   const { pathname } = useLocation()
   const headerRef = useRef(null)
 
-  // Color theme: 'terracotta' or 'regolith'
-  const [theme, setTheme] = useState(() => localStorage.getItem('vesper-theme') || 'terracotta')
   // Light / dark mode
   const [lightMode, setLightMode] = useState(() => localStorage.getItem('vesper-lightmode') === 'true')
   // Navbar scrolled state
@@ -79,10 +56,11 @@ export default function App() {
   // Loader shown once per session
   const [loaderDone, setLoaderDone] = useState(() => sessionStorage.getItem('vesper-loaded') === 'true')
 
+  // Single colour theme (Terracotta). Regolith was retired; the attribute is still set so the CSS tokens resolve.
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('vesper-theme', theme)
-  }, [theme])
+    document.documentElement.setAttribute('data-theme', 'terracotta')
+    localStorage.removeItem('vesper-theme')
+  }, [])
 
   useEffect(() => {
     if (lightMode) {
@@ -92,6 +70,20 @@ export default function App() {
     }
     localStorage.setItem('vesper-lightmode', lightMode)
   }, [lightMode])
+
+  // Publish the sticky header's height so sticky bars below it (e.g. the Site play bar) can sit right under it
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(() => document.documentElement.style.setProperty('--header-h', `${el.offsetHeight}px`))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  // Phones scroll the nav sideways — keep the current page's link in view
+  useEffect(() => {
+    headerRef.current?.querySelector('.top-nav .active')?.scrollIntoView({ block: 'nearest', inline: 'center' })
+  }, [pathname])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -104,7 +96,7 @@ export default function App() {
   return (
     <>
       {!loaderDone && (
-        <VesperLoader onDone={() => {
+        <VesperLoader ready={data.status !== 'loading'} onDone={() => {
           setLoaderDone(true)
           sessionStorage.setItem('vesper-loaded', 'true')
         }} />
@@ -128,7 +120,7 @@ export default function App() {
             Sites Explorer
           </NavLink>
           <NavLink to={link('/compare')} className="nav-link">Compare</NavLink>
-          <NavLink to="/method" className="nav-link">Method &amp; Team</NavLink>
+          <NavLink to="/method" className="nav-link">Method</NavLink>
         </nav>
 
         <div className="top-controls">
@@ -136,34 +128,18 @@ export default function App() {
           <button
             type="button"
             className="lightdark-toggle"
-            onClick={() => setLightMode(m => !m)}
+            onClick={() => {
+              const root = document.documentElement
+              root.classList.add('theme-switching')
+              setTimeout(() => root.classList.remove('theme-switching'), 450)
+              setLightMode(m => !m)
+            }}
             title={lightMode ? 'Switch to dark mode' : 'Switch to light mode'}
             aria-label={lightMode ? 'Switch to dark mode' : 'Switch to light mode'}
           >
             {lightMode ? <IconSun /> : <IconMoon />}
           </button>
 
-          {/* Color theme selector */}
-          <div className="theme-pill" role="radiogroup" aria-label="Color theme">
-            <button
-              type="button"
-              className={theme === 'terracotta' ? 'active' : ''}
-              onClick={() => setTheme('terracotta')}
-              title="Velvet Terracotta & Molten Copper"
-            >
-              <span className="theme-dot" style={{ background: '#e06d53' }} />
-              <span>Terra</span>
-            </button>
-            <button
-              type="button"
-              className={theme === 'regolith' ? 'active' : ''}
-              onClick={() => setTheme('regolith')}
-              title="Lunar Regolith & Solar Ray"
-            >
-              <span className="theme-dot" style={{ background: '#c8b89a' }} />
-              <span>Regolith</span>
-            </button>
-          </div>
         </div>
       </header>
 

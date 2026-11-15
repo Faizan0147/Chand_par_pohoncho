@@ -64,7 +64,7 @@ export default function Panorama({ site, series, i }) {
       {/* Top Controls: Mode Switcher & Telemetry Readout */}
       <div className="pano-top-bar">
         <div className="pano-title">
-          <span className="dot" />
+          <span className="dot-live" />
           <strong>360° Horizon Observation</strong>
           <span className="mono muted small">({site.name})</span>
         </div>
@@ -321,6 +321,23 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
   // Orbit camera angles
   const [orbitRotX, setOrbitRotX] = useState(0.4) // tilt
   const [orbitRotY, setOrbitRotY] = useState(0.8) // spin
+  const [orbitZoom, setOrbitZoom] = useState(1)   // Moon scale in orbit view
+
+  // Zoom: narrows the field of view on the surface, scales the Moon in orbit view
+  const perspectiveRef = useRef(perspective)
+  perspectiveRef.current = perspective
+  const zoomBy = dir => {
+    if (perspectiveRef.current === 'surface') setFov(f => Math.max(20, Math.min(120, Math.round(dir > 0 ? f / 1.25 : f * 1.25))))
+    else setOrbitZoom(z => Math.max(0.6, Math.min(2.6, dir > 0 ? z * 1.2 : z / 1.2)))
+  }
+  // Wheel zoom needs a non-passive listener so the page doesn't scroll at the same time
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const onWheel = e => { e.preventDefault(); zoomBy(e.deltaY < 0 ? 1 : -1) }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
 
   const isDragging = useRef(false)
   const dragStart = useRef({ x: 0, y: 0, yaw: 0, pitch: 0, rotX: 0, rotY: 0 })
@@ -534,7 +551,7 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
     // ══════════════════════════════════════════════════════════════
     const cx = W / 2
     const cy = H / 2
-    const R = Math.min(W * 0.38, H * 0.38, 200)
+    const R = Math.min(W * 0.38, H * 0.38, 200) * orbitZoom
 
     const sunRad = (sunAz * Math.PI) / 180
     const sunElevRad = (sunEl * Math.PI) / 180
@@ -658,11 +675,12 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
     ctx.fillText(`EARTH (${earthVis ? 'LOS' : 'OCCULTED'})`, earthDistX + 12, earthDistY + 4)
   }
 
-  }, [site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, earthVis, width, height, yaw, pitch, fov, perspective, orbitRotX, orbitRotY, isFullscreen])
+  }, [site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, earthVis, width, height, yaw, pitch, fov, perspective, orbitRotX, orbitRotY, orbitZoom, isFullscreen])
 
   // Drag to Look Around Handlers
   const onPointerDown = e => {
-    setTrackingMode('manual') // switch to manual look on user drag
+    // Manual look only kicks in once the pointer actually drags (see onPointerMove), so a tap
+    // during playback doesn't stop the camera tracking the Sun
     isDragging.current = true
     dragStart.current = {
       x: e.clientX,
@@ -678,6 +696,8 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
     if (!isDragging.current) return
     const dx = e.clientX - dragStart.current.x
     const dy = e.clientY - dragStart.current.y
+    if (Math.hypot(dx, dy) < 4) return
+    if (perspective === 'surface' && trackingMode !== 'manual') setTrackingMode('manual')
 
     if (perspective === 'surface') {
       const sensitivity = fov / (isFullscreen ? window.innerWidth : width)
@@ -742,6 +762,10 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
         </div>
 
         <div className="dome-hud-buttons">
+          <div className="dome-zoom" role="group" aria-label="Zoom">
+            <button type="button" className="btn small hud-btn" onClick={() => zoomBy(-1)} aria-label="Zoom out" title="Zoom out (or scroll on the view)">−</button>
+            <button type="button" className="btn small hud-btn" onClick={() => zoomBy(1)} aria-label="Zoom in" title="Zoom in (or scroll on the view)">+</button>
+          </div>
           {/* Perspective switch */}
           <button
             type="button"
