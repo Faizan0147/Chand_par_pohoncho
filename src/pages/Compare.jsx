@@ -67,7 +67,7 @@ export default function Compare() {
               ))}
               <tr>
                 <th scope="row">Slip radar<div className="muted small">0 → 30 days late</div></th>
-                {cols.map(c => <td key={c.site.id}><SlipStrip cells={c.prof.cells} slip={sc.slip} onPick={d => setScenario({ slip: d })} /></td>)}
+                {cols.map(c => <td key={c.site.id}><SlipStrip compact cells={c.prof.cells} slip={sc.slip} onPick={d => setScenario({ slip: d })} /></td>)}
               </tr>
             </tbody>
           </table>

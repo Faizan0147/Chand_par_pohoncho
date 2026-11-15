@@ -18,7 +18,7 @@ Project notes live in [`docs/`](docs/): start with [M1 status](docs/M1-STATUS.md
 | Horizons comparison | `pipeline/validate_illumination.py` reproduces published 18.6-year average illumination to a few percentage points (see Method page). |
 | Moon-frame offset (PA→ME) | Magnitudes were entered from memory; sign was checked against the mean Earth direction. Verify against the DE421 frame kernel. |
 
-Not built: Moon-vs-home toggle (SunCalc), jsPDF Site Brief, PSR layer, landing-oval, 3D view.
+Built in M3: phone/touch polish, Moon vs home (SunCalc), one-page PDF Site Brief (jsPDF; Site page → *Download brief (PDF)*, same numbers as the page, warns on synthetic terrain). Not built: PSR layer, landing-oval, 3D view.
 
 ## Run the app
 
@@ -63,7 +63,7 @@ Needs internet. Writes `public/data/validation.json`, which the *How it works* p
 
 ## Deploy
 
-Push to `main` on GitHub, then Settings → Pages → Source: GitHub Actions. `.github/workflows/deploy.yml` tests, builds and publishes `dist/`. The app uses relative paths and a hash router, so it works under any repo name.
+CI/CD pipelines are removed for now. Run `npm test` and `npm run build`, then publish `dist/` (or the single-file `dist-preview/rimlight-preview.html`) by hand. The app uses relative paths and a hash router, so it works under any repo name.
 
 ## Layout
 
