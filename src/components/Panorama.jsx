@@ -315,6 +315,9 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
   const [pitch, setPitch] = useState(() => Math.max(0, sunEl))
   const [fov, setFov] = useState(70)
   
+  // Tracking mode: 'sun' | 'earth' | 'manual' — automatically follows celestial target when playing timeline
+  const [trackingMode, setTrackingMode] = useState('sun')
+
   // Orbit camera angles
   const [orbitRotX, setOrbitRotX] = useState(0.4) // tilt
   const [orbitRotY, setOrbitRotY] = useState(0.8) // spin
@@ -322,10 +325,16 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
   const isDragging = useRef(false)
   const dragStart = useRef({ x: 0, y: 0, yaw: 0, pitch: 0, rotX: 0, rotY: 0 })
 
-  // Re-orient when sun moves significantly if user hasn't touched controls
+  // Auto-track celestial bodies: when timeline animation plays, move camera frame accordingly!
   useEffect(() => {
-    // Keep yaw normalized 0..360
-  }, [sunAz])
+    if (trackingMode === 'sun') {
+      setYaw(sunAz)
+      setPitch(Math.max(-2, Math.min(60, sunEl)))
+    } else if (trackingMode === 'earth') {
+      setYaw(earthAz)
+      setPitch(Math.max(-2, Math.min(60, earthEl)))
+    }
+  }, [sunAz, sunEl, earthAz, earthEl, trackingMode])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -653,6 +662,7 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
 
   // Drag to Look Around Handlers
   const onPointerDown = e => {
+    setTrackingMode('manual') // switch to manual look on user drag
     isDragging.current = true
     dragStart.current = {
       x: e.clientX,
@@ -750,13 +760,39 @@ function Horizon3DDome({ site, mask, sunAz, sunEl, sunLit, earthAz, earthEl, ear
 
           {perspective === 'surface' && (
             <>
-              <button type="button" className="btn small hud-btn" onClick={() => { setYaw(sunAz); setPitch(Math.max(0, sunEl)) }}>
-                Target Sun ☀
+              <button
+                type="button"
+                className={`btn small hud-btn ${trackingMode === 'sun' ? 'active' : ''}`}
+                onClick={() => {
+                  setTrackingMode('sun')
+                  setYaw(sunAz)
+                  setPitch(Math.max(0, sunEl))
+                }}
+                title="Follow Sun automatically across the sky as timeline plays"
+              >
+                Track Sun ☀
               </button>
-              <button type="button" className="btn small hud-btn" onClick={() => { setYaw(earthAz); setPitch(Math.max(0, earthEl)) }}>
-                Target Earth ⊕
+              <button
+                type="button"
+                className={`btn small hud-btn ${trackingMode === 'earth' ? 'active' : ''}`}
+                onClick={() => {
+                  setTrackingMode('earth')
+                  setYaw(earthAz)
+                  setPitch(Math.max(0, earthEl))
+                }}
+                title="Follow Earth automatically across the sky as timeline plays"
+              >
+                Track Earth ⊕
               </button>
-              <button type="button" className="btn small hud-btn" onClick={() => { setYaw(0); setPitch(5) }}>
+              <button
+                type="button"
+                className={`btn small hud-btn ${trackingMode === 'manual' && yaw === 0 ? 'active' : ''}`}
+                onClick={() => {
+                  setTrackingMode('manual')
+                  setYaw(0)
+                  setPitch(5)
+                }}
+              >
                 North 0°
               </button>
             </>
