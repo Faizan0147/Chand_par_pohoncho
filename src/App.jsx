@@ -9,33 +9,24 @@ import Method from './pages/Method.jsx'
 import Pick from './pages/Pick.jsx'
 import Site from './pages/Site.jsx'
 
-/* ── Vesper Logo — industry-grade aerospace mark ── */
+/* ── Vesper Logo — geometric V lettermark, aerospace grade ── */
 function VesperLogo() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="brand-logo-svg">
-      {/* The core concept: a horizon line bisecting a perfect circle (the Moon)
-          with the sun grazing at the limb — the entire mission in one glyph */}
+      {/* Background pill — dark card shape, like a mission badge */}
+      <rect x="1" y="1" width="30" height="30" rx="8" fill="#0d0f16" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
 
-      {/* Moon disc — dark fill, clean circle */}
-      <circle cx="16" cy="16" r="11.5" fill="#0c0e15" stroke="rgba(255,255,255,0.12)" strokeWidth="1"/>
+      {/* The V — two angled strokes meeting at the bottom point */}
+      {/* Left arm of V */}
+      <line x1="7" y1="9" x2="16" y2="23" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round"/>
+      {/* Right arm of V */}
+      <line x1="25" y1="9" x2="16" y2="23" stroke="var(--sun)" strokeWidth="2.5" strokeLinecap="round"/>
 
-      {/* Horizon line — the terrain, perfectly bisecting */}
-      <line x1="4.5" y1="20" x2="27.5" y2="20" stroke="rgba(255,255,255,0.22)" strokeWidth="1" strokeLinecap="round"/>
+      {/* Horizon crossbar — the grazing ray, Vesper's core concept */}
+      <line x1="9" y1="17" x2="23" y2="17" stroke="rgba(253,230,138,0.6)" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="2.5 2"/>
 
-      {/* Grazing sun arc — rises just above the horizon, the rimlight effect */}
-      <path
-        d="M 6.5 20 A 11.5 11.5 0 0 1 25.5 20"
-        fill="none"
-        stroke="var(--sun)"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      {/* Bright node at the horizon tangent — landing site */}
-      <circle cx="16" cy="20" r="2" fill="var(--sun)"/>
-
-      {/* Top glint — the "V" of Vesper, the evening star peak */}
-      <circle cx="16" cy="8" r="1.3" fill="var(--sun-flare, #fde68a)" opacity="0.9"/>
+      {/* Landing site dot at the V apex */}
+      <circle cx="16" cy="23" r="1.8" fill="var(--sun-flare, #fde68a)"/>
     </svg>
   )
 }
