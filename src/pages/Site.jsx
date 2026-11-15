@@ -4,6 +4,7 @@ import Panorama from '../components/Panorama.jsx'
 import Timeline from '../components/Timeline.jsx'
 import SlipStrip from '../components/SlipStrip.jsx'
 import MoonVsHome from '../components/MoonVsHome.jsx'
+import BriefButton from '../components/BriefButton.jsx'
 import { useData, useKeepSearch, useScenario } from '../lib/data.jsx'
 import { SUN_RADIUS_DEG, EARTH_RADIUS_DEG } from '../lib/geometry.js'
 import { dateFromIdx, fmtDate, fmtHours, missionWindow, nextChange, slipProfile, windowStats } from '../lib/metrics.js'
@@ -58,7 +59,10 @@ function SiteView({ site }) {
           <h1>{site.name}</h1>
           <p className="muted">{site.kind} · {site.lat.toFixed(2)}°, {site.lon.toFixed(2)}°E · terrain: <span className={site.terrain === 'synthetic-demo' || site.terrain === 'flat-sphere' ? 'warn' : ''}>{site.terrain === 'synthetic-demo' ? 'synthetic placeholder' : site.terrain === 'flat-sphere' ? 'none (smooth sphere)' : site.terrain}</span></p>
         </div>
-        <Link className="btn" to={{ ...link('/compare'), search: addSite(link('/').search, site.id) }}>Compare this site</Link>
+        <div className="pagehead-actions">
+          <Link className="btn" to={{ ...link('/compare'), search: addSite(link('/').search, site.id) }}>Compare this site</Link>
+          <BriefButton site={site} sc={sc} st={st} sp={sp} v={v} eph={eph} i0={i0} i1={i1} series={series} />
+        </div>
       </div>
 
       <div className={`verdict ${v.ok ? 'ok' : 'bad'}`} role="status">

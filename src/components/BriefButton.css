@@ -1,0 +1,5 @@
+/* PDF Site Brief button (M3) */
+.pagehead-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; }
+.brief { display: inline-flex; flex-direction: column; gap: 4px; }
+.brief .btn[disabled] { opacity: .6; cursor: progress; }
+.brief-err { color: var(--bad, #e05555); }

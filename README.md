@@ -16,7 +16,7 @@ All state lives in the URL, so any view can be shared as a link.
 | Horizons comparison | `pipeline/validate_horizons.py` is written but **has not been run**. |
 | Moon-frame offset (PA→ME) | Magnitudes were entered from memory; sign was checked against the mean Earth direction. Verify against the DE421 frame kernel. |
 
-Not built: Moon-vs-home toggle (SunCalc), jsPDF Site Brief, PSR layer, landing-oval, 3D view.
+Built in M3: phone/touch polish, Moon vs home (SunCalc), one-page PDF Site Brief (jsPDF; Site page → *Download brief (PDF)*, same numbers as the page, warns on synthetic terrain). Not built: PSR layer, landing-oval, 3D view.
 
 ## Run the app
 
