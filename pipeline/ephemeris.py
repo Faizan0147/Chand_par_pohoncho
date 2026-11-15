@@ -9,7 +9,14 @@ Data: JPL DE421 (NASA/JPL) via the `de421` PyPI bundle + `jplephem==1.2`.
 Frame chain:  ICRF --[psi]3[theta]1[phi]3--> MOON_PA --small constant--> MOON_ME
 
 NOT modelled (all < ~0.01 deg): light-time/aberration, TDB-TT difference.
-UTC -> TDB uses TAI-UTC = 37 s (valid since 2017; check if a leap second is added).
+  Measured against JPL Horizons (public/data/validation.json): the Sun's azimuth is off by
+  0.0058 deg (20.5 arcsec) = annual aberration, which we do not apply; the Earth's by
+  0.0002 deg.
+
+UTC -> TDB uses TAI-UTC = 37 s. Confirmed for the app's date range: IERS Bulletin C 72
+(6 July 2026) states "NO leap second ... at the end of December 2026" and UTC-TAI = -37 s
+"from 2017 January 1 ... until further notice" (next decision January 2027). A surprise
+1 s leap second would shift these angles by < 0.6 arcsec - below every threshold here.
 """
 import numpy as np
 import de421
@@ -20,12 +27,15 @@ TT_MINUS_UTC_S = 37.0 + 32.184          # seconds
 R_MOON_KM = 1737.4
 ARCSEC = np.pi / (180.0 * 3600.0)
 
-# MOON_PA -> MOON_ME constant rotation. Magnitudes (67.92", 78.56", 0.30" about axes 3,2,1)
-# are from the DE421 frame kernel (moon_080317.tf), written here from memory; their total
-# (~104" = 0.029 deg) matches the published PA-ME offset. The SIGN was NOT taken from memory:
-# tests/test_geometry.py checks that with PA_TO_ME_SIGN = -1 the 1990-2030 mean sub-Earth point
-# lands within ~0.01 deg of lon=0, lat=0 (it is ~0.04 deg off with +1).
-# If you load the real NAIF kernels (moon_de440_*.tf + moon_pa_*.bpc) you can drop this.
+# MOON_PA -> MOON_ME constant rotation, VERIFIED 14 Nov 2026 against NAIF's real DE421
+# frame kernel moon_080317.tf: TKFRAME_31007_ANGLES = (67.92, 78.56, 0.30) ARCSECONDS about
+# AXES (3, 2, 1), RELATIVE_TO MOON_PA_DE421 - the magnitudes above match the kernel exactly.
+# The SIGN was the open question (the kernel does not state it in our convention):
+#   python pipeline/check_frame.py   loads that kernel with spiceypy and compares matrices:
+#   sign -1 matches SPICE to 0.004 arcsec, sign +1 is off by 208 arcsec.
+# sign -1 also passes the offline check in tests/test_geometry.py (the 1990-2030 mean
+# sub-Earth point must sit at lon 0, lat 0 in the ME frame; it misses by ~0.04 deg with +1).
+# If you load the real NAIF kernels (moon_080317.tf + moon_pa_*.bpc) you can drop this.
 PA_TO_ME_ARCSEC = (67.92, 78.56, 0.30)
 PA_TO_ME_SIGN = -1.0
 

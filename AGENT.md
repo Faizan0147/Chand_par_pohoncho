@@ -29,11 +29,11 @@ pipeline/ (Python)                           public/data/ (static JSON)         
  ephemeris.py   DE421 Sun/Earth in MOON_ME -> ephemeris.json (hourly, 425 d) -> lib/data.jsx builds series
  horizon_dem.py LOLA DEM ray-march 360 az  -> sites.json (id,name,kind,lat,lon,  lib/geometry.js az/el
  build_data.py  writes both + reference.json     note,terrain,horizon[360])      lib/metrics.js windows, slip
- validate_horizons.py JPL Horizons check   -> validation.json (not yet produced)  lib/explain.js plain text
+ validate_horizons.py JPL Horizons check   -> validation.json (run 14 Nov 2026)  lib/explain.js plain text
  fetch/diagnostic scripts (M1)                                                    components/, pages/
 ```
-- Ephemeris: JPL DE421 via PyPI `de421` + `jplephem==1.2` (**pinned**, API differs in 2.x). Frame: ICRF -> MOON_PA (libration Euler angles) -> MOON_ME via a constant offset (67.92", 78.56", 0.30"; sign -1). Magnitudes were entered from memory **[unverified vs frame kernel moon_080317.tf]**; sign checked empirically against the mean Earth direction.
-- Not modelled: light-time/aberration, TDB-TT (<0.01 deg). TAI-UTC fixed at 37 s.
+- Ephemeris: JPL DE421 via PyPI `de421` + `jplephem==1.2` (**pinned**, API differs in 2.x). Frame: ICRF -> MOON_PA (libration Euler angles) -> MOON_ME via a constant offset (67.92", 78.56", 0.30"; sign -1). **Verified 14 Nov 2026** against NAIF's frame kernel `moon_080317.tf` with spiceypy (`python pipeline/check_frame.py`): matches SPICE to 0.004"; the opposite sign is off by 208".
+- Not modelled: light-time/aberration, TDB-TT (<0.01 deg; the Sun's residual vs Horizons is 0.0058 deg = annual aberration, measured). TAI-UTC fixed at 37 s, confirmed by IERS Bulletin C 72 (no leap second at end of 2026; next decision Jan 2027).
 - Time range: 2026-11-01 .. 2027-12-30, hourly. Dates outside show "outside data".
 - Horizon: `horizon_dem.horizon_profile(dem, lat, lon, observer_height=2 m, n_az=360, max_dist_m=15000)` ray-marches with curvature, no refraction. Azimuth 0 = north, clockwise. Longitude east-positive 0-360 in `sites.json`.
 - Speed: everything precomputed; the browser only slices arrays.
@@ -56,6 +56,7 @@ python -m venv .venv ; pip install -r pipeline/requirements.txt
 python pipeline/build_data.py         # rebuilds public/data/*.json + tests/reference.json (M1 owners only)
 python pipeline/tests/test_geometry.py
 python pipeline/validate_horizons.py  # needs internet, writes public/data/validation.json
+python pipeline/check_frame.py        # needs spiceypy + NAIF kernels (auto-download), frame offset check
 ```
 Windows note: if App Control blocks PyPI DLLs: `Get-ChildItem -Recurse .venv\Lib\site-packages -Include *.dll,*.pyd | Unblock-File`.
 
@@ -72,7 +73,8 @@ Rules: branch per module, small PRs, main always builds; only M1 owners regenera
 
 ## 8. Current status (M1 complete, 14 Nov 2026)
 Built: ephemeris pipeline (DE421), DEM ray-marcher, real LOLA terrain for all 7 sites (20 m/px PGDA, 118 m/px global fallback for IM-1), 4-page app, URL state, slip strip, deploy workflow, single-file preview.
-M1 results, coordinate rationale and the 18.6-year validation: `docs/M1-STATUS.md`. Frame/longitude convention confirmed by cross-correlation (zero shift, rms 1.7-2.7 m); Horizon validation still unrun (M2); not built: Moon-vs-home, PDF brief, PSR layer, landing oval, 3D view.
+M1 results, coordinate rationale and the 18.6-year validation: `docs/M1-STATUS.md`. Frame/longitude convention confirmed by cross-correlation (zero shift, rms 1.7-2.7 m); not built: Moon-vs-home, PDF brief, PSR layer, landing oval, 3D view.
+Done (M2, 14 Nov 2026): Horizons validation run and committed (`public/data/validation.json`, max diff 0.0058°, threshold 0.1° shown on the Method page); PA→ME offset verified against NAIF `moon_080317.tf` with spiceypy; TAI-UTC = 37 s confirmed (IERS Bulletin C 72).
 
 ## 9. Honesty rules
 Every displayed number comes from our computation on NASA data. Never invent values or show synthetic horizons as real. State resolution, observer height (2 m) and Horizons error on the Method page. Declare AI assistance in the submission.

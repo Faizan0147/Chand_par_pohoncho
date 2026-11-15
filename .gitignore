@@ -18,6 +18,7 @@ pipeline/dem/*
 !pipeline/dem/.gitkeep
 *.npy
 pipeline/.horizons_cache/
+pipeline/kernels/*.bpc
 
 # local snapshots used while checking a rebuild
 *.bak
