@@ -66,6 +66,8 @@ export default function Method() {
         <li>LRO LOLA elevation models: 20 m/px 80–90°S DEM (Barker et al. 2021, PSS 203) and 118 m/px global LOLA DEM (Smith et al. 2010, GRL 37), via NASA PGDA and USGS Astrogeology.</li>
         <li>Site positions: Mazarico et al. 2011 (Icarus 211), Speyerer &amp; Robinson 2013 (Icarus 222), De Rosa et al. 2012, and LROC landing-site fixes.</li>
         <li>Published illumination figures used for validation: Mazarico et al. 2011, Speyerer &amp; Robinson 2013, Noda et al. 2008.</li>
+        <li>Site map (Sites → Map): shaded relief computed from the LRO LOLA 80–90°S polar elevation model (LDEM_80S_*_ADJ) from the NASA GSFC Planetary Geodesy Data Archive (PGDA). Source: Barker et al. (2023), “A New View of the Lunar South Pole from LOLA”, Planet. Sci. J. 4, 183, doi:10.3847/PSJ/acf3e1; data doi:10.60903/gsfcpgda-lola-spole. Usage terms: PGDA asks that this paper be cited.</li>
+        <li>Permanently shadowed regions on the map (optional layer): LOLA-derived PSR polygons (LPSR_80S_20MPP_ADJ) from the same PGDA product and citation, simplified for display. Shown only once built from the downloaded data.</li>
       </ul>
     </div>
   )

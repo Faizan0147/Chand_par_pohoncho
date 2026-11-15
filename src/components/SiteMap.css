@@ -1,0 +1,45 @@
+/* Sites-page map (M4). Own file so it does not touch shared styles.css sections. */
+.sm { margin: 0 0 18px; }
+.sm-bar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-bottom: 10px; }
+.sm-bar .viewtoggle { margin: 0; }
+.sm-psrtoggle { min-height: 40px; }
+.sm-psrtoggle input { width: 20px; height: 20px; accent-color: var(--earth); }
+.sm-psrtoggle.off { opacity: .75; }
+
+.sm-frame { position: relative; width: 100%; max-width: 780px; aspect-ratio: 1 / 1; margin: 0 auto; background: #05070b;
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.sm-frame img, .sm-frame svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.sm-frame img { object-fit: fill; user-select: none; }
+
+.sm-grat line, .sm-grat circle { fill: none; stroke: rgba(170, 184, 210, .32); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.sm-gratlabel text, .sm-scale text { fill: #c3cde0; paint-order: stroke; stroke: #04060b; stroke-linejoin: round; }
+.sm-scale rect { fill: #e8ebf2; stroke: #04060b; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+
+.sm-psr { fill: rgba(74, 163, 255, .30); fill-rule: evenodd; stroke: #8cc8ff; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+
+.sm-site { cursor: pointer; outline: none; }
+.sm-hit { fill: transparent; }
+.sm-dot { stroke: #04060b; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+.sm-dot.ok { fill: var(--ok); } .sm-dot.bad { fill: var(--bad); }
+.sm-site:hover .sm-dot, .sm-site:focus-visible .sm-dot { stroke: #fff; stroke-width: 3px; }
+.sm-site:focus-visible .sm-hit { fill: rgba(255, 255, 255, .12); stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+.sm-num { fill: #04060b; font-weight: 700; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.sm-label { fill: var(--text); font-weight: 600; paint-order: stroke; stroke: #04060b; stroke-linejoin: round; }
+.sm-site:hover .sm-label, .sm-site:focus-visible .sm-label { text-decoration: underline; }
+
+.sm-cluster { cursor: pointer; outline: none; }
+.sm-cluster rect { fill: rgba(245, 197, 66, .10); stroke: var(--sun); stroke-width: 1.5px; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
+.sm-cluster:hover rect, .sm-cluster:focus-visible rect { stroke: #fff; stroke-width: 3px; stroke-dasharray: none; }
+.sm-cluster text { fill: #ffdf9a; font-weight: 600; paint-order: stroke; stroke: #04060b; stroke-linejoin: round; }
+.sm-mini { stroke: #04060b; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.sm-mini.works { fill: var(--ok); } .sm-mini.fails { fill: var(--bad); }
+
+.sm-legend { list-style: none; padding: 0; margin: 14px auto 6px; max-width: 780px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 6px 14px; }
+.sm-legend li { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+.sm-legend a { flex: 1; }
+.sm-key { width: 24px; height: 24px; flex: none; display: inline-grid; place-items: center; font-size: .8rem; font-weight: 700; color: #04060b; }
+.sm-key.works { background: var(--ok); border-radius: 50%; }
+.sm-key.fails { background: var(--bad); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.sm-credit { max-width: 780px; margin: 6px auto 0; }
+.sm-leader { stroke: #e8ebf2; stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .8; }
+.sm-true { fill: #e8ebf2; stroke: #04060b; stroke-width: 1px; vector-effect: non-scaling-stroke; }
