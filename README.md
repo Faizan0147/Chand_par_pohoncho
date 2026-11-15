@@ -134,4 +134,4 @@ The map is built from the LOLA south-pole products at https://pgda.gsfc.nasa.gov
   - LROC landing-site imagery.
 - **Libraries:** React, Vite, D3, SunCalc (Earth-side Sun positions), jsPDF.
 
-**Team:** [@Md-Zainulabdin](https://github.com/Md-Zainulabdin) (terrain and site coordinates) · [@FaizanAhmeddd27](https://github.com/FaizanAhmeddd27) (JPL Horizons validation) · [@Faizan0147](https://github.com/Faizan0147) (app, phone polish, Moon vs home, PDF brief) · [@arooj-zehra](https://github.com/arooj-zehra) (site map and shadowed regions)
+**Team:** [@Md-Zainulabdin](https://github.com/Md-Zainulabdin) (terrain and site coordinates) · [@FaizanAhmeddd27](https://github.com/FaizanAhmeddd27) (JPL Horizons validation) · [@Faizan0147](https://github.com/Faizan0147) (app, phone polish, Moon vs home, PDF brief) · [@arooj-zehra](https://github.com/arooj-zehra) and [@Syeda-Aliza-Ayaz](https://github.com/Syeda-Aliza-Ayaz) (site map and shadowed regions)
