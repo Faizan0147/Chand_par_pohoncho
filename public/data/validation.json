@@ -1,37 +1,37 @@
 {
- "generated": "2026-11-14T20:32:53.021427+00:00",
+ "generated": "2026-11-15T12:24:04.572579+00:00",
  "window": "2026-12-01 +288 h, step 6 h",
  "rows": [
   {
    "site": "Connecting Ridge",
    "body": "Sun",
-   "elMaxAbsDeg": 0.0006689025520525416,
-   "elRmsDeg": 0.0006296013108304091,
-   "azMaxAbsDeg": 0.00579138191653783,
+   "elMaxAbsDeg": 0.0006702703903949114,
+   "elRmsDeg": 0.0006300916532474284,
+   "azMaxAbsDeg": 0.005791749011336833,
    "samples": 49
   },
   {
    "site": "Connecting Ridge",
    "body": "Earth",
-   "elMaxAbsDeg": 2.5260948162575403e-05,
-   "elRmsDeg": 1.3988595050146251e-05,
-   "azMaxAbsDeg": 0.00019265116830524676,
+   "elMaxAbsDeg": 2.5337868139629904e-05,
+   "elRmsDeg": 1.4048735335329814e-05,
+   "azMaxAbsDeg": 0.00019200811556174813,
    "samples": 49
   },
   {
    "site": "Shackleton rim",
    "body": "Sun",
-   "elMaxAbsDeg": 0.0006344109061813263,
-   "elRmsDeg": 0.0006132361927582279,
-   "azMaxAbsDeg": 0.005790576663258662,
+   "elMaxAbsDeg": 0.0006397610336807968,
+   "elRmsDeg": 0.0006168637240084976,
+   "azMaxAbsDeg": 0.005790497436521491,
    "samples": 49
   },
   {
    "site": "Shackleton rim",
    "body": "Earth",
-   "elMaxAbsDeg": 2.6735493265039878e-05,
-   "elRmsDeg": 1.4514836630691194e-05,
-   "azMaxAbsDeg": 0.00019278711553738503,
+   "elMaxAbsDeg": 2.7039939671791302e-05,
+   "elRmsDeg": 1.4371219146907796e-05,
+   "azMaxAbsDeg": 0.00019246624825086656,
    "samples": 49
   },
   {
