@@ -82,8 +82,19 @@ export function useScenario() {
   return [sc, set]
 }
 
-/** Keep the scenario when navigating between pages. */
+/** Keep the scenario when navigating between pages, cleanly splitting pathname and search parameters. */
 export function useKeepSearch() {
   const { search } = useLocation()
-  return pathname => ({ pathname, search })
+  return to => {
+    if (typeof to === 'string') {
+      const [pathname, q] = to.split('?')
+      const nextSearch = new URLSearchParams(search)
+      if (q) {
+        new URLSearchParams(q).forEach((val, key) => nextSearch.set(key, val))
+      }
+      const s = nextSearch.toString()
+      return { pathname, search: s ? `?${s}` : '' }
+    }
+    return { ...to, search: to.search ?? search }
+  }
 }

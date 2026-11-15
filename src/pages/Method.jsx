@@ -9,7 +9,19 @@ export default function Method() {
   const synthetic = data.status === 'ready' ? data.sites.filter(s => s.terrain === 'synthetic-demo').length : 0
   return (
     <div className="prose">
-      <h1>How Rimlight works</h1>
+      <div className="section-header-tag mono">
+        <span className="dot-live" />
+        <span>NASA SPACE APPS CHALLENGE 2026</span>
+      </div>
+      <h1>Methodology &amp; Project Overview</h1>
+
+      <div className="panel" style={{ marginTop: '16px', marginBottom: '28px' }}>
+        <h3 style={{ marginTop: 0, marginBottom: '8px' }}>The Rimlight Project</h3>
+        <p style={{ margin: 0, fontSize: '0.96rem', lineHeight: '1.6' }}>
+          Built for the <strong>NASA Space Apps Challenge 2026</strong>. 
+          Rimlight was conceived and engineered to answer a critical lunar exploration question: <em>At any specific south-polar coordinate, date, and stay duration, will the Sun and Earth clear the rugged crater terrain, and how late can a launch slip before solar power or direct communication fails?</em>
+        </p>
+      </div>
 
       <h2>What it does</h2>
       <p>For a landing site and date it computes where the Sun and Earth are in the lunar sky every hour, compares them with the terrain horizon, and reports when each is visible. From that it derives sunlight share, longest night, Earth-in-view share, longest communications gap, and how many days the launch can slip before your requirements fail.</p>
