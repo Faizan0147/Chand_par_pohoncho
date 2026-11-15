@@ -9,27 +9,33 @@ import Method from './pages/Method.jsx'
 import Pick from './pages/Pick.jsx'
 import Site from './pages/Site.jsx'
 
-/* ── High-visibility Aerospace Vesper Logo Mark ── */
+/* ── Vesper Logo — evening star crescent with polar horizon ── */
 function VesperLogo() {
   return (
-    <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="brand-logo-svg">
-      {/* Outer subtle orbital boundary */}
-      <circle cx="18" cy="18" r="16" stroke="var(--line-strong)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6"/>
-      {/* Moon body disc */}
-      <circle cx="18" cy="18" r="12" fill="var(--panel-elevated)" stroke="var(--line-strong)" strokeWidth="1.2"/>
-      {/* Grazing solar Vesper arc */}
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="brand-logo-svg">
+      {/* Moon body — dark sphere */}
+      <circle cx="20" cy="22" r="13" fill="#0b0d13"/>
+      {/* Crescent shadow overlay — shifted right to carve the crescent */}
+      <circle cx="25" cy="20" r="12" fill="var(--bg, #07080a)"/>
+      {/* Rimlight edge glow on the crescent left edge */}
+      <circle cx="20" cy="22" r="13" fill="none" stroke="var(--sun)" strokeWidth="1.4" opacity="0.35"/>
+      {/* Bright rimlight arc — the lit edge of the crescent (left side) */}
       <path
-        d="M 18 6 A 12 12 0 0 1 18 30"
+        d="M 10.5 14.5 A 13 13 0 0 0 10.5 29.5"
         fill="none"
         stroke="var(--sun)"
-        strokeWidth="2.8"
+        strokeWidth="2.2"
         strokeLinecap="round"
       />
-      {/* Penetrating solar light ray */}
-      <line x1="29" y1="5" x2="21.5" y2="12.5" stroke="var(--sun)" strokeWidth="2.2" strokeLinecap="round"/>
-      <line x1="33" y1="12" x2="27" y2="16.5" stroke="var(--sun-flare, #fca584)" strokeWidth="1.5" strokeLinecap="round" opacity="0.8"/>
-      {/* Central south polar target dot */}
-      <circle cx="18" cy="18" r="2.2" fill="var(--text-bright)"/>
+      {/* South pole target reticle — small cross at bottom */}
+      <circle cx="20" cy="34.5" r="1.6" fill="var(--sun)" opacity="0.9"/>
+      {/* Vesper star — the evening star above the crescent */}
+      <circle cx="30" cy="8" r="1.8" fill="var(--sun-flare, #fde68a)"/>
+      {/* Star cross-hair sparkle */}
+      <line x1="30" y1="4.8" x2="30" y2="6.4" stroke="var(--sun-flare, #fde68a)" strokeWidth="1" strokeLinecap="round" opacity="0.7"/>
+      <line x1="30" y1="9.6" x2="30" y2="11.2" stroke="var(--sun-flare, #fde68a)" strokeWidth="1" strokeLinecap="round" opacity="0.7"/>
+      <line x1="26.8" y1="8" x2="28.4" y2="8" stroke="var(--sun-flare, #fde68a)" strokeWidth="1" strokeLinecap="round" opacity="0.7"/>
+      <line x1="31.6" y1="8" x2="33.2" y2="8" stroke="var(--sun-flare, #fde68a)" strokeWidth="1" strokeLinecap="round" opacity="0.7"/>
     </svg>
   )
 }
